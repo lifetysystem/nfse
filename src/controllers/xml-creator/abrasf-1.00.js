@@ -20,7 +20,7 @@ const setRequirements = (object, city) => {
         try {
             const particularitiesObject = settingsControllerAsync(object, city);
 
-            createXml(object, particularitiesObject, numeroLote)
+            createXml(object, particularitiesObject, object.config.numeroLote || numeroLote)
                 .then(res => {
                     const result = {
                         status: 200,
@@ -105,7 +105,7 @@ const createXml = async (object, particularitiesObject, numeroLote) => {
                                         isDifferentSignature = particularitiesObject['isSigned']['isDifferentSignature'];
                                     }
 
-                                    createSignature(xml, cert, 'LoteRps', signatureId, isEmptyUri, isDifferentSignature)
+                                    createSignature(xml, cert, 'InfRps', signatureId, isEmptyUri, isDifferentSignature)
                                         .then(xmlSignature => {
                                             // if (particularitiesObject['xsds']['enviarLoteRps']) {
                                             //     validator.validateXML(xmlSignature, __dirname + particularitiesObject['xsds']['enviarLoteRps'], function (err, validatorResult) {
@@ -121,7 +121,7 @@ const createXml = async (object, particularitiesObject, numeroLote) => {
                                             //     })
                                             // }
                                             try {
-                                                let xml = particularitiesObject['envelopment'].replace('__xml__', xmlSignature);
+                                                let xml = particularitiesObject['envelopment'].replace('__xml__', xmlSignature.replaceAll('<','&lt;'));
 
                                                 const result = {
                                                     url: particularitiesObject['webserviceUrl'],
@@ -506,8 +506,8 @@ const createXml = async (object, particularitiesObject, numeroLote) => {
                                         resolve(validatorResult);
                                     }
 
-                                    let xml = '<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">';
-                                    xml += '<soap:Body>';
+                                    let xml = '<Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">';
+                                    xml += '<Body>';
                                     xml += '<ns1:ConsultarSituacaoLoteRpsV3 xmlns:ns1="' + particularitiesObject['urlXmlns'] + '">';
                                     xml += '<arg0>';
                                     xml += '<ns2:cabecalho versao="3" xmlns:ns2="http://www.ginfes.com.br/cabecalho_v03.xsd">';
@@ -518,8 +518,8 @@ const createXml = async (object, particularitiesObject, numeroLote) => {
                                     xml += xmlSignature;
                                     xml += '</arg1>';
                                     xml += '</ns1:ConsultarSituacaoLoteRpsV3>';
-                                    xml += '</soap:Body>';
-                                    xml += '</soap:Envelope>';
+                                    xml += '</Body>';
+                                    xml += '</Envelope>';
 
                                     const result = {
                                         url: particularitiesObject['webserviceUrl'],
@@ -583,8 +583,8 @@ const createXml = async (object, particularitiesObject, numeroLote) => {
                                         resolve(validatorResult);
                                     }
 
-                                    let xml = '<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">';
-                                    xml += '<soap:Body>';
+                                    let xml = '<Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">';
+                                    xml += '<Body>';
                                     xml += '<ns1:ConsultarSituacaoLoteRpsV3 xmlns:ns1="' + particularitiesObject['urlXmlns'] + '">';
                                     xml += '<arg0>';
                                     xml += '<ns2:cabecalho versao="3" xmlns:ns2="http://www.ginfes.com.br/cabecalho_v03.xsd">';
@@ -595,8 +595,8 @@ const createXml = async (object, particularitiesObject, numeroLote) => {
                                     xml += xmlSignature;
                                     xml += '</arg1>';
                                     xml += '</ns1:ConsultarSituacaoLoteRpsV3>';
-                                    xml += '</soap:Body>';
-                                    xml += '</soap:Envelope>';
+                                    xml += '</Body>';
+                                    xml += '</Envelope>';
 
                                     const result = {
                                         url: particularitiesObject['webserviceUrl'],
@@ -662,7 +662,8 @@ function addSignedXml(object, cert, particularitiesObject, numeroLote) {
                         prestadorIncricaoMunicipal = r.prestador.inscricaoMunicipal;
                     }
                 }
-                xmlToBeSigned += `<${particularitiesObject['tags']['rpsAlterada'] ? particularitiesObject['tags']['rpsAlterada'] : particularitiesObject['tags']['rps']}>`;
+                xmlToBeSigned += `<Rps>`;
+                console.log( particularitiesObject['tags']['rps']);
                 if (object.emissor.cpfCnpj && object.emissor.cpfCnpj != '') {
                     xmlToBeSigned += `<${particularitiesObject['tags']['infRpsAlterada'] ? particularitiesObject['tags']['infRpsAlterada'] : particularitiesObject['tags']['infRps']}>`;
                 }

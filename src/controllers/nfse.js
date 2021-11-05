@@ -10,7 +10,7 @@ const regexQuot = new RegExp('&quot;', 'g');
 //Global variables
 var object = {};
 var city = {};
-var model = {};
+var model = {model: 'abrasf1.00'};
 
 //Controllers
 const abrasf100Controller = require('./xml-creator/abrasf-1.00');
@@ -28,7 +28,7 @@ const sendNfselController = require('./send-nfse');
 const nfse = (newObject) => {
     object = newObject;
     return new Promise((resolve, reject) => {
-        findCityByCodeAsync(object.config.codigoMunicipio);
+        findCityByCode(object.config.codigoMunicipio);
         findModelByKeywordAsync(city.nfseKeyword);
         setModelToSend(city, model)
             .then(res => {
@@ -36,7 +36,6 @@ const nfse = (newObject) => {
                     request: res.request,
                     response: res.response
                 }
-                
                 resolve(result);
             })
             .catch(rej => {

@@ -70,6 +70,8 @@ const abrasf100 = {
     intermediarioServico: "IntermediarioServico",
     razaoSocial: "RazaoSocial",
     cpfCnpj: "CpfCnpj",
+    cpf: "Cpf",
+    cnpj: "Cnpj",
     inscricaoMunicipal: "InscricaoMunicipal",
     contrucaoCivil: "ContrucaoCivil",
     codigoObra: "CodigoObra",

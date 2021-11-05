@@ -25,6 +25,9 @@
 }, {
     "model": "abrasf2.02",
     "filename": "abrasf2.02.xsd"
+},{
+    "model": "publica",
+    "filename": "publica.xsd"
 }, {
     "model": "abrasf2.04",
     "filename": "abrasf2.04.xsd"
