@@ -68,8 +68,8 @@ const setParticularities = (object, city) => {
 
         case 'publica':
             try {
-                object.config.producaoHomologacao === 'producao' ? particularitiesObject['webserviceUrl'] = 'https://producao.ginfes.com.br/ServiceGinfesImpl?wsdl' : particularitiesObject['webserviceUrl'] = 'http://nfse-teste.publica.inf.br/homologa_nfse_integracao/Services?wsdl';
-                object.config.producaoHomologacao === 'producao' ? particularitiesObject['urlXmlns'] = 'http://producao.ginfes.com.br' : particularitiesObject['urlXmlns'] = 'http://nfse-teste.publica.inf.br';
+                object.config.producaoHomologacao === 'producao' ? particularitiesObject['webserviceUrl'] = 'http://nfse1.publica.inf.br/chapeco_nfse_integracao/Services?wsdl' : particularitiesObject['webserviceUrl'] = 'http://nfse-teste.publica.inf.br/homologa_nfse_integracao/Services?wsdl';
+                object.config.producaoHomologacao === 'producao' ? particularitiesObject['urlXmlns'] = 'http://nfse1.publica.inf.br' : particularitiesObject['urlXmlns'] = 'http://nfse-teste.publica.inf.br';
                 particularitiesObject['nfseKeyword'] = 'publica';
 
                 if (object.config.acao === 'enviarLoteRps') {
@@ -87,29 +87,29 @@ const setParticularities = (object, city) => {
 
                 if (object.config.acao === 'consultarLoteRps') {
                     particularitiesObject['tags'] = {...abrasf100Model.abrasf100};
-                    addPrefixesAsync(['ConsultarLoteRpsEnvio', 'Prestador', 'Protocolo'], 'ns3:', particularitiesObject);
-                    doNotAddPrefixesAsync(['ConsultarLoteRpsEnvio', 'Prestador', 'Protocolo'], 'ns4:', particularitiesObject);
-                    particularitiesObject['tags']['consultarLoteRpsEnvioAlterada'] = `${particularitiesObject['tags']['consultarLoteRpsEnvio']}  xmlns:ns3="http://www.ginfes.com.br/servico_consultar_lote_rps_envio_v03.xsd" xmlns:ns4="http://www.ginfes.com.br/tipos_v03.xsd"`;
-                    particularitiesObject['envelopment'] = '<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><ns1:ConsultarLoteRpsV3 xmlns:ns1="' + particularitiesObject['urlXmlns'] + '"><arg0><ns2:cabecalho versao="3" xmlns:ns2="http://www.ginfes.com.br/cabecalho_v03.xsd"><versaoDados>3</versaoDados></ns2:cabecalho></arg0><arg1>__xml__</arg1></ns1:ConsultarLoteRps></soap:Body></soap:Envelope>';
+                    addPrefixesAsync(['ConsultarLoteRpsEnvio', 'Prestador', 'Protocolo'], '', particularitiesObject);
+                    doNotAddPrefixesAsync(['ConsultarLoteRpsEnvio', 'Prestador', 'Protocolo'], '', particularitiesObject);
+                    particularitiesObject['tags']['consultarLoteRpsEnvioAlterada'] = `${particularitiesObject['tags']['consultarLoteRpsEnvio']}  xmlns="http://www.publica.inf.br" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.publica.inf.br schema_nfse_v03.xsd"`;
+                    particularitiesObject['envelopment'] = `<?xml version='1.0' encoding='utf-8'?><soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"><soapenv:Header/><soapenv:Body><rpcOp:ConsultarLoteRps xmlns:rpcOp="http://service.nfse.integracao.ws.publica/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><XML>__xml__</XML></rpcOp:ConsultarLoteRps></soapenv:Body></soapenv:Envelope>`;
                     particularitiesObject['isSigned']['consultarLoteRps'] = true;
                 }
 
                 if (object.config.acao === 'consultarNfsePorRps') {
                     particularitiesObject['tags'] = {...abrasf100Model.abrasf100};
-                    addPrefixesAsync(['ConsultarNfseRpsEnvio', 'Prestador', 'IdentificacaoRps'], 'ns3:', particularitiesObject);
-                    doNotAddPrefixesAsync(['ConsultarNfseRpsEnvio', 'Prestador', 'IdentificacaoRps'], 'ns4:', particularitiesObject);
-                    particularitiesObject['tags']['consultarNfseRpsEnvioAlterada'] = `${particularitiesObject['tags']['consultarNfseRpsEnvio']}  xmlns:ns3="http://www.ginfes.com.br/servico_consultar_nfse_rps_envio_v03.xsd" xmlns:ns4="http://www.ginfes.com.br/tipos_v03.xsd"`;
-                    particularitiesObject['envelopment'] = '<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><ns1:ConsultarNfsePorRpsV3 xmlns:ns1="' + particularitiesObject['urlXmlns'] + '"><arg0><ns2:cabecalho versao="3" xmlns:ns2="http://www.ginfes.com.br/cabecalho_v03.xsd"><versaoDados>3</versaoDados></ns2:cabecalho></arg0><arg1>__xml__</arg1></ns1:ConsultarNfsePorRpsV3></soap:Body></soap:Envelope>';
+                    addPrefixesAsync(['ConsultarNfseRpsEnvio', 'Prestador', 'IdentificacaoRps'], '', particularitiesObject);
+                    doNotAddPrefixesAsync(['ConsultarNfseRpsEnvio', 'Prestador', 'IdentificacaoRps'], ':', particularitiesObject);
+                    particularitiesObject['tags']['consultarNfseRpsEnvioAlterada'] = `${particularitiesObject['tags']['consultarLoteRpsEnvio']}  xmlns="http://www.publica.inf.br" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.publica.inf.br schema_nfse_v03.xsd"`;
+                    particularitiesObject['envelopment'] = `<?xml version='1.0' encoding='utf-8'?><soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"><soapenv:Header/><soapenv:Body><rpcOp:ConsultarNfsePorRps xmlns:rpcOp="http://service.nfse.integracao.ws.publica/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><XML>__xml__</XML></rpcOp:ConsultarNfsePorRps></soapenv:Body></soapenv:Envelope>`;
                     particularitiesObject['isSigned']['consultarNfseRps'] = true;
                     particularitiesObject['isSigned']['isEmptyUri'] = true;
                 }
 
                 if (object.config.acao === 'cancelarNfse') {
                     particularitiesObject['tags'] = {...abrasf201Model.abrasf201};
-                    addPrefixesAsync(['CancelarNfseEnvio', 'Prestador', 'NumeroNfse'], 'ns3:', particularitiesObject);
-                    doNotAddPrefixesAsync(['CancelarNfseEnvio', 'Prestador', 'NumeroNfse'], 'ns4:', particularitiesObject);
-                    particularitiesObject['tags']['cancelarNfseEnvioAlterada'] = `${particularitiesObject['tags']['cancelarNfseEnvio']} xmlns:ns3="http://www.ginfes.com.br/servico_cancelar_nfse_envio" xmlns:ns4="http://www.ginfes.com.br/tipos"`;
-                    particularitiesObject['envelopment'] = `<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Header/><soap:Body><ns1:CancelarNfse xmlns:ns1="${particularitiesObject['urlXmlns']}"><arg0>__xml__</arg0></ns1:CancelarNfse></soap:Body></soap:Envelope>`;
+                    addPrefixesAsync(['CancelarNfseEnvio', 'Prestador', 'NumeroNfse'], '', particularitiesObject);
+                    doNotAddPrefixesAsync(['CancelarNfseEnvio', 'Prestador', 'NumeroNfse'], '', particularitiesObject);
+                    particularitiesObject['tags']['cancelarNfseEnvioAlterada'] = `${particularitiesObject['tags']['cancelarNfseEnvio']}  xmlns="http://www.publica.inf.br" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.publica.inf.br schema_nfse_v03.xsd"`;
+                    particularitiesObject['envelopment'] = `<?xml version='1.0' encoding='utf-8'?><soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"><soapenv:Header/><soapenv:Body><rpcOp:CancelarNfse xmlns:rpcOp="http://service.nfse.integracao.ws.publica/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><XML>__xml__</XML></rpcOp:CancelarNfse></soapenv:Body></soapenv:Envelope>`;
                     particularitiesObject['isSigned']['cancelarNfse'] = true;
                     particularitiesObject['isSigned']['isEmptyUri'] = true;
                 }

@@ -121,7 +121,11 @@ const createXml = async (object, particularitiesObject, numeroLote) => {
                                             //     })
                                             // }
                                             try {
-                                                let xml = particularitiesObject['envelopment'].replace('__xml__', xmlSignature.replaceAll('<','&lt;'));
+                                                if(particularitiesObject['nfseKeyword'] === 'publica'){
+                                                    xmlSignature = xmlSignature.replaceAll('<','&lt;');
+                                                }
+
+                                                let xml = particularitiesObject['envelopment'].replace('__xml__');
 
                                                 const result = {
                                                     url: particularitiesObject['webserviceUrl'],
@@ -218,6 +222,10 @@ const createXml = async (object, particularitiesObject, numeroLote) => {
                                             //     })
                                             // }
                                             try {
+                                                if(particularitiesObject['nfseKeyword'] === 'publica'){
+                                                    xmlSignature = xmlSignature.replaceAll('<','&lt;');
+                                                }
+                                                
                                                 let xml = particularitiesObject['envelopment'].replace('__xml__', xmlSignature);
 
                                                 const result = {
@@ -298,7 +306,10 @@ const createXml = async (object, particularitiesObject, numeroLote) => {
                                     xml += xmlNotSigned;
                                     xml += `</${particularitiesObject['tags']['cancelarNfseEnvio']}>`;
 
-
+                                    if(particularitiesObject['nfseKeyword'] === 'publica'){
+                                        xmlSignature = xmlSignature.replaceAll('<','&lt;');
+                                    }
+                                    
                                     xml = particularitiesObject['envelopment'].replace('__xml__', xml);
 
                                     if (particularitiesObject['isSigned']['cancelarNfse']) {
@@ -366,8 +377,12 @@ const createXml = async (object, particularitiesObject, numeroLote) => {
                                     // }
                                     let xml = particularitiesObject['envelopment'].replace('__xml__', xmlNotSigned);
 
+                                    if(particularitiesObject['nfseKeyword'] === 'publica'){
+                                        xmlSignature = xmlSignature.replaceAll('<','&lt;');
+                                    }
+
                                     if (particularitiesObject['isSigned']['consultarLoteRps']) {
-                                        xml = particularitiesObject['envelopment'].replace('__xml__', xmlSignature);
+                                        xml = particularitiesObject['envelopment'].replace('__xml__',xmlSignature );
                                     }
 
                                     const result = {
@@ -450,6 +465,10 @@ const createXml = async (object, particularitiesObject, numeroLote) => {
                                     //         }
                                     //     })
                                     // }
+                                    if(particularitiesObject['nfseKeyword'] === 'publica'){
+                                        xmlSignature = xmlSignature.replaceAll('<','&lt;');
+                                    }
+                                    
                                     let xml = particularitiesObject['envelopment'].replace('__xml__', xmlNotSigned);
 
                                     if (particularitiesObject['isSigned']['consultarNfseRps']) {
