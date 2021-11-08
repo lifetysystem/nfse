@@ -125,7 +125,7 @@ const createXml = async (object, particularitiesObject, numeroLote) => {
                                                     xmlSignature = xmlSignature.replaceAll('<','&lt;');
                                                 }
 
-                                                let xml = particularitiesObject['envelopment'].replace('__xml__');
+                                                let xml = particularitiesObject['envelopment'].replace('__xml__',xmlSignature);
 
                                                 const result = {
                                                     url: particularitiesObject['webserviceUrl'],
