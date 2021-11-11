@@ -97,8 +97,8 @@ const setParticularities = (object, city) => {
                 if (object.config.acao === 'consultarNfsePorRps') {
                     particularitiesObject['tags'] = {...abrasf100Model.abrasf100};
                     addPrefixesAsync(['ConsultarNfseRpsEnvio', 'Prestador', 'IdentificacaoRps'], '', particularitiesObject);
-                    doNotAddPrefixesAsync(['ConsultarNfseRpsEnvio', 'Prestador', 'IdentificacaoRps'], ':', particularitiesObject);
-                    particularitiesObject['tags']['consultarNfseRpsEnvioAlterada'] = `${particularitiesObject['tags']['consultarLoteRpsEnvio']}  xmlns="http://www.publica.inf.br" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.publica.inf.br schema_nfse_v03.xsd"`;
+                    doNotAddPrefixesAsync(['ConsultarNfseRpsEnvio', 'Prestador', 'IdentificacaoRps'], '', particularitiesObject);
+                    particularitiesObject['tags']['consultarNfseRpsEnvioAlterada'] = `${particularitiesObject['tags']['consultarNfseRpsEnvio']}  xmlns="http://www.publica.inf.br" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.publica.inf.br schema_nfse_v03.xsd"`;
                     particularitiesObject['envelopment'] = `<?xml version='1.0' encoding='utf-8'?><soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"><soapenv:Header/><soapenv:Body><rpcOp:ConsultarNfsePorRps xmlns:rpcOp="http://service.nfse.integracao.ws.publica/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><XML>__xml__</XML></rpcOp:ConsultarNfsePorRps></soapenv:Body></soapenv:Envelope>`;
                     particularitiesObject['isSigned']['consultarNfseRps'] = true;
                     particularitiesObject['isSigned']['isEmptyUri'] = true;
