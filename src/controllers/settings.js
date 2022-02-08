@@ -82,6 +82,7 @@ const setParticularities = (object, city) => {
                     particularitiesObject['isSigned']['isEmptyUri'] = false;
                     particularitiesObject['envelopment'] = `<?xml version='1.0' encoding='utf-8'?><soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"><soapenv:Header/><soapenv:Body><rpcOp:RecepcionarLoteRps xmlns:rpcOp="http://service.nfse.integracao.ws.publica/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><XML>__xml__</XML></rpcOp:RecepcionarLoteRps></soapenv:Body></soapenv:Envelope>`;
                     particularitiesObject['isSigned']['isDifferentSignature'] = true;
+                    particularitiesObject['isSigned']['infRps']=false;
                   //  particularitiesObject['isSigned']['signatureId'] = 'dsig'
                 }
 

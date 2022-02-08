@@ -134,7 +134,7 @@ const createXml = async (object, particularitiesObject, numeroLote) => {
                                                 if (particularitiesObject['soapActions'] && particularitiesObject['soapActions']['enviarLoteRps']) {
                                                     result['soapAction'] = particularitiesObject['soapActions']['enviarLoteRps'];
                                                 }
-
+                                                
                                                 resolve(result);
                                             } catch (error) {
                                                 console.error(error);
@@ -839,7 +839,7 @@ function addSignedXml(object, cert, particularitiesObject, numeroLote) {
                     }
                     xmlToBeSigned += `</${particularitiesObject['tags']['tomador']}>`;
                 }
-                xmlToBeSigned += `</${particularitiesObject['tags']['infRps']}>`;
+                xmlToBeSigned += `</${particularitiesObject['tags']['infRpsFinal'] || particularitiesObject['tags']['infRps']}>`;
                 xmlToBeSigned += `</${particularitiesObject['tags']['rps']}>`;
                 xmlToBeSigned = xmlToBeSigned.replace(regexUnique, uniqueValue + index);
 

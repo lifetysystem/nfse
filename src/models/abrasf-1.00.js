@@ -12,6 +12,7 @@ const abrasf100 = {
     listaRps: "ListaRps",
     rps: "Rps",
     infRps: "InfRps",
+    infRpsFinal: "InfRps",
     identificacaoRps: "IdentificacaoRps",
     numero: "Numero",
     serie: "Serie",
