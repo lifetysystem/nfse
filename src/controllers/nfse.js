@@ -116,8 +116,8 @@ const setModelToSend = (city, model) => {
                             resolve(result);
                         } else {
                             const objectWithXml = res.message;
-                            if (city.cityCode == 4204202) { // código cidade chapecó
-                                objectWithXml.url = 'https://chapeco.meumunicipio.online/abrasf/ws?wsdl';
+                            if (city.cityCode == 4204202 && res.message.url) { // código cidade chapecó
+                                objectWithXml.url = 'https://chapeco.meumunicipio.online/abrasf/Services?wsdl';
                             }
                             sendNfselController.webServiceRequest(objectWithXml, object)
                                 .then(resSentXml => {
