@@ -28,6 +28,9 @@
 },{
     "model": "publica",
     "filename": "publica.xsd"
+},{
+    "model": "chapeco",
+    "filename": "publica.xsd"
 }, {
     "model": "abrasf2.04",
     "filename": "abrasf2.04.xsd"

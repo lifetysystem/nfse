@@ -127,7 +127,68 @@ const setParticularities = (object, city) => {
                 console.error(error);
             }
             break;
-    
+        case 'chapeco':
+            try {
+                object.config.producaoHomologacao === 'producao' ? particularitiesObject['webserviceUrl'] = 'https://chapeco.meumunicipio.online/abrasf/ws?wsdl' : particularitiesObject['webserviceUrl'] = 'http://nfse-teste.publica.inf.br/homologa_nfse_integracao/Services?wsdl';
+                object.config.producaoHomologacao === 'producao' ? particularitiesObject['urlXmlns'] = 'http://nfse1.publica.inf.br' : particularitiesObject['urlXmlns'] = 'http://nfse-teste.publica.inf.br';
+                particularitiesObject['nfseKeyword'] = 'chapeco';
+
+                if (object.config.acao === 'enviarLoteRps') {
+                    particularitiesObject['tags'] = {...abrasf100Model.abrasf100};
+                    addPrefixesAsync(['EnviarLoteRpsEnvio', 'LoteRps'], '', particularitiesObject);
+                    doNotAddPrefixesAsync(['EnviarLoteRpsEnvio', 'LoteRps'], '', particularitiesObject);
+                    particularitiesObject['tags']['enviarLoteRpsEnvioAlterada'] = `${particularitiesObject['tags']['enviarLoteRpsEnvio']} xmlns="http://www.publica.inf.br" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.publica.inf.br schema_nfse_v03.xsd"`;
+                    particularitiesObject['tags']['loteRps'] = `${particularitiesObject['tags']['loteRps']} versao="1.00"`;
+                    particularitiesObject['tags']['infRps'] = `${particularitiesObject['tags']['infRps']} id="_uniqueValue"`;
+                    particularitiesObject['isSigned']['isEmptyUri'] = false;
+                    particularitiesObject['envelopment'] = `<?xml version='1.0' encoding='utf-8'?><soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"><soapenv:Header/><soapenv:Body><rpcOp:RecepcionarLoteRps xmlns:rpcOp="http://service.nfse.integracao.ws.publica/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><XML>__xml__</XML></rpcOp:RecepcionarLoteRps></soapenv:Body></soapenv:Envelope>`;
+                    particularitiesObject['isSigned']['isDifferentSignature'] = true;
+                    particularitiesObject['isSigned']['infRps']=false;
+                    //  particularitiesObject['isSigned']['signatureId'] = 'dsig'
+                }
+
+                if (object.config.acao === 'consultarLoteRps') {
+                    particularitiesObject['tags'] = {...abrasf100Model.abrasf100};
+                    addPrefixesAsync(['ConsultarLoteRpsEnvio', 'Prestador', 'Protocolo'], '', particularitiesObject);
+                    doNotAddPrefixesAsync(['ConsultarLoteRpsEnvio', 'Prestador', 'Protocolo'], '', particularitiesObject);
+                    particularitiesObject['tags']['consultarLoteRpsEnvioAlterada'] = `${particularitiesObject['tags']['consultarLoteRpsEnvio']}  xmlns="http://www.publica.inf.br" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.publica.inf.br schema_nfse_v03.xsd"`;
+                    particularitiesObject['envelopment'] = `<?xml version='1.0' encoding='utf-8'?><soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"><soapenv:Header/><soapenv:Body><rpcOp:ConsultarLoteRps xmlns:rpcOp="http://service.nfse.integracao.ws.publica/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><XML>__xml__</XML></rpcOp:ConsultarLoteRps></soapenv:Body></soapenv:Envelope>`;
+                    particularitiesObject['isSigned']['consultarLoteRps'] = true;
+                }
+
+                if (object.config.acao === 'consultarNfsePorRps') {
+                    particularitiesObject['tags'] = {...abrasf100Model.abrasf100};
+                    addPrefixesAsync(['ConsultarNfseRpsEnvio', 'Prestador', 'IdentificacaoRps'], '', particularitiesObject);
+                    doNotAddPrefixesAsync(['ConsultarNfseRpsEnvio', 'Prestador', 'IdentificacaoRps'], '', particularitiesObject);
+                    particularitiesObject['tags']['consultarNfseRpsEnvioAlterada'] = `${particularitiesObject['tags']['consultarNfseRpsEnvio']}  xmlns="http://www.publica.inf.br" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.publica.inf.br schema_nfse_v03.xsd"`;
+                    particularitiesObject['envelopment'] = `<?xml version='1.0' encoding='utf-8'?><soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"><soapenv:Header/><soapenv:Body><rpcOp:ConsultarNfsePorRps xmlns:rpcOp="http://service.nfse.integracao.ws.publica/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><XML>__xml__</XML></rpcOp:ConsultarNfsePorRps></soapenv:Body></soapenv:Envelope>`;
+                    particularitiesObject['isSigned']['consultarNfseRps'] = true;
+                    particularitiesObject['isSigned']['isEmptyUri'] = true;
+                }
+
+                if (object.config.acao === 'cancelarNfse') {
+                    particularitiesObject['tags'] = {...abrasf201Model.abrasf201};
+                    addPrefixesAsync(['CancelarNfseEnvio', 'Prestador', 'NumeroNfse'], '', particularitiesObject);
+                    doNotAddPrefixesAsync(['CancelarNfseEnvio', 'Prestador', 'NumeroNfse'], '', particularitiesObject);
+                    particularitiesObject['tags']['cancelarNfseEnvioAlterada'] = `${particularitiesObject['tags']['cancelarNfseEnvio']}  xmlns="http://www.publica.inf.br" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.publica.inf.br schema_nfse_v03.xsd"`;
+                    particularitiesObject['envelopment'] = `<?xml version='1.0' encoding='utf-8'?><soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"><soapenv:Header/><soapenv:Body><rpcOp:CancelarNfse xmlns:rpcOp="http://service.nfse.integracao.ws.publica/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><XML>__xml__</XML></rpcOp:CancelarNfse></soapenv:Body></soapenv:Envelope>`;
+                    particularitiesObject['isSigned']['cancelarNfse'] = true;
+                    particularitiesObject['isSigned']['isEmptyUri'] = true;
+                }
+
+                particularitiesObject['xsds'] = {
+                    enviarLoteRps: '/../../../resources/xsd/publica/schema_nfse_v03.xsd',
+                    consultarLoteRps: '/../../../resources/xsd/publica/schema_nfse_v03.xsd',
+                    consultarNfseRps: '/../../../resources/xsd/publica/schema_nfse_v03.xsd'
+                }
+                particularitiesObject['soapActions'] = {//https://chapeco.meumunicipio.online/abrasf/ws?wsdl
+                    enviarLoteRps: 'https://chapeco.meumunicipio.online/ws#RecepcionarLoteRps'
+                }
+            } catch (error) {
+                console.error(error);
+            }
+            break;
+
         case 'saojosedospinhais':
             try {
                 object.config.producaoHomologacao === 'producao' ? particularitiesObject['webserviceUrl'] = 'https://nfe.sjp.pr.gov.br/servicos/issOnline2/ws/index.php?wsdl' : particularitiesObject['webserviceUrl'] = 'https://nfe.sjp.pr.gov.br/servicos/issOnline2/homologacao/ws/index.php?wsdl';
