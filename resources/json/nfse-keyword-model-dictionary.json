@@ -28,12 +28,14 @@
 },{
     "model": "publica",
     "filename": "publica.xsd"
-},{
-    "model": "chapeco",
-    "filename": "publica.xsd"
 }, {
     "model": "abrasf2.04",
-    "filename": "abrasf2.04.xsd"
+    "filename": "abrasf2.04.xsd",
+    "nfseKeyword": [
+        {
+            "name": "chapeco"
+        }
+    ]
 }, {
     "model": "saopaulo1.00",
     "filename": "sao-paulo1.00.xsd",

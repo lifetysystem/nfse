@@ -1,6 +1,7 @@
 // Models
 const abrasf100Model = require('../models/abrasf-1.00');
 const abrasf201Model = require('../models/abrasf-2.01');
+const abrasf204Model = require('../models/abrasf-2.04');
 const saopaulo100Model = require('../models/sao-paulo-1.00');
 
 
@@ -130,20 +131,20 @@ const setParticularities = (object, city) => {
         case 'chapeco':
             try {
                 object.config.producaoHomologacao === 'producao' ? particularitiesObject['webserviceUrl'] = 'https://chapeco.meumunicipio.online/abrasf/ws?wsdl' : particularitiesObject['webserviceUrl'] = 'http://nfse-teste.publica.inf.br/homologa_nfse_integracao/Services?wsdl';
-                object.config.producaoHomologacao === 'producao' ? particularitiesObject['urlXmlns'] = 'http://nfse1.publica.inf.br' : particularitiesObject['urlXmlns'] = 'http://nfse-teste.publica.inf.br';
+                object.config.producaoHomologacao === 'producao' ? particularitiesObject['urlXmlns'] = 'http://www.abrasf.org.br/nfse.xsd' : particularitiesObject['urlXmlns'] = 'http://nfse-teste.publica.inf.br';
                 particularitiesObject['nfseKeyword'] = 'chapeco';
 
                 if (object.config.acao === 'enviarLoteRps') {
-                    particularitiesObject['tags'] = {...abrasf100Model.abrasf100};
+                    particularitiesObject['tags'] = {...abrasf204Model.abrasf204};
                     addPrefixesAsync(['EnviarLoteRpsEnvio', 'LoteRps'], '', particularitiesObject);
                     doNotAddPrefixesAsync(['EnviarLoteRpsEnvio', 'LoteRps'], '', particularitiesObject);
-                    particularitiesObject['tags']['enviarLoteRpsEnvioAlterada'] = `${particularitiesObject['tags']['enviarLoteRpsEnvio']} xmlns="http://www.publica.inf.br" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.publica.inf.br schema_nfse_v03.xsd"`;
-                    particularitiesObject['tags']['loteRps'] = `${particularitiesObject['tags']['loteRps']} versao="1.00"`;
-                    particularitiesObject['tags']['infRps'] = `${particularitiesObject['tags']['infRps']} id="_uniqueValue"`;
+                    particularitiesObject['tags']['enviarLoteRpsEnvioAlterada'] = `${particularitiesObject['tags']['enviarLoteRpsEnvio']} xmlns="http://www.abrasf.org.br/nfse.xsd"`;
+                    particularitiesObject['tags']['loteRps'] = `${particularitiesObject['tags']['loteRps']} versao="2.04"`;
+                    particularitiesObject['tags']['infDeclaracaoPrestacaoServico'] = `${particularitiesObject['tags']['infDeclaracaoPrestacaoServico']} id="_uniqueValue"`;
                     particularitiesObject['isSigned']['isEmptyUri'] = false;
-                    particularitiesObject['envelopment'] = `<?xml version='1.0' encoding='utf-8'?><soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"><soapenv:Header/><soapenv:Body><rpcOp:RecepcionarLoteRps xmlns:rpcOp="http://service.nfse.integracao.ws.publica/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><XML>__xml__</XML></rpcOp:RecepcionarLoteRps></soapenv:Body></soapenv:Envelope>`;
+                    particularitiesObject['envelopment'] = `<?xml version='1.0' encoding='utf-8'?><soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ws="https://abrasfchapeco.meumunicipio.online/ws"><soapenv:Header/><soapenv:Body><ws:RecepcionarLoteRps xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><xml>__xml__</xml></ws:RecepcionarLoteRps></soapenv:Body></soapenv:Envelope>`;
                     particularitiesObject['isSigned']['isDifferentSignature'] = true;
-                    particularitiesObject['isSigned']['infRps']=false;
+                    particularitiesObject['isSigned']['infDeclaracaoPrestacaoServico'] = false;
                     //  particularitiesObject['isSigned']['signatureId'] = 'dsig'
                 }
 
@@ -177,9 +178,9 @@ const setParticularities = (object, city) => {
                 }
 
                 particularitiesObject['xsds'] = {
-                    enviarLoteRps: '/../../../resources/xsd/publica/schema_nfse_v03.xsd',
-                    consultarLoteRps: '/../../../resources/xsd/publica/schema_nfse_v03.xsd',
-                    consultarNfseRps: '/../../../resources/xsd/publica/schema_nfse_v03.xsd'
+                    enviarLoteRps: '/../../../resources/xsd/abrasf2.04.xsd',
+                    consultarLoteRps: '/../../../resources/xsd/abrasf2.04.xsd',
+                    consultarNfseRps: '/../../../resources/xsd/abrasf2.04.xsd'
                 }
                 particularitiesObject['soapActions'] = {//https://chapeco.meumunicipio.online/abrasf/ws?wsdl
                     enviarLoteRps: 'https://chapeco.meumunicipio.online/ws#RecepcionarLoteRps'

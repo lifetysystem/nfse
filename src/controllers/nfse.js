@@ -10,7 +10,7 @@ const regexQuot = new RegExp('&quot;', 'g');
 //Global variables
 var object = {};
 var city = {};
-var model = {model: 'abrasf1.00'};
+var model = {model: 'abrasf2.04'};
 
 //Controllers
 const abrasf100Controller = require('./xml-creator/abrasf-1.00');
@@ -176,6 +176,49 @@ const setModelToSend = (city, model) => {
                     .catch(rej => {
                         reject(rej);
                         console.error(rej);
+                    })
+            } else if (modelToCheck.model === 'abrasf2.04') {
+                abrasf204Controller.setRequirements(object, city)
+                    .then(res => {
+                        if (res['stack']) {
+                            const result = {
+                                status: 200,
+                                request: res,
+                                response: res['message'].split('[error]')
+                            };
+                            
+                            resolve(result);
+                        } else {
+                            const objectWithXml = res.message;
+                            // if (city.cityCode == 4204202 && res.message.url && res.message.soapAction) { // código cidade chapecó
+                            //     objectWithXml.url = 'https://chapeco.meumunicipio.online/abrasf/ws?wsdl';
+                            //     objectWithXml.soapAction.replace('http://service.nfse.integracao.ws.publica', 'https://chapeco.meumunicipio.online/abrasf')
+                            // }
+                            sendNfselController.webServiceRequest(objectWithXml, object)
+                                .then(resSentXml => {
+                                    try {
+                                        const result = {
+                                            request: res,
+                                            response: resSentXml.body.replace(regexLT, '<').replace(regexGT, '>').replace(regexQuot, '"')
+                                        };
+                                        resolve(result);
+                                    } catch (error) {
+                                        const result = {
+                                            request: res,
+                                            response: error
+                                        };
+
+                                        reject(result);
+                                    }
+                                    
+                                })
+                                .catch(rejSentXml => {
+                                    reject(rejSentXml);
+                                })
+                        }
+                    })
+                    .catch(rej => {
+                        reject(rej);
                     })
             } else if (modelToCheck.model === 'saopaulo1.00') {
                 saopaulo100Controller.setRequirements(object, city)
