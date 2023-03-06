@@ -685,7 +685,7 @@ function addSignedXml(object, cert, particularitiesObject, numeroLote) {
                 console.log( particularitiesObject['tags']['rps']);
                 if (object.emissor.cpfCnpj && object.emissor.cpfCnpj != '') {
                     // TODO verificar funcionalidade da rps alterada
-                    xmlToBeSigned += `<${particularitiesObject['tags']['infRpsAlterada'] ? particularitiesObject['tags']['infRpsAlterada'] : particularitiesObject['tags']['InfDeclaracaoPrestacaoServico']}>`;
+                    xmlToBeSigned += `<${particularitiesObject['tags']['infRpsAlterada'] ? particularitiesObject['tags']['infRpsAlterada'] : particularitiesObject['tags']['infDeclaracaoPrestacaoServico']}>`;
                 }
                 xmlToBeSigned += `<${particularitiesObject['tags']['identificacaoRps']}>`;
                 xmlToBeSigned += `<${particularitiesObject['tags']['numero']}>` + numeroRps + `</${particularitiesObject['tags']['numero']}>`;
@@ -748,10 +748,10 @@ function addSignedXml(object, cert, particularitiesObject, numeroLote) {
                     xmlToBeSigned += `<${particularitiesObject['tags']['aliquota']}>` + r.servico.aliquota + `</${particularitiesObject['tags']['aliquota']}>`;
                 }
                 if (r.servico.descontoIncondicionado && r.servico.descontoIncondicionado != '') {
-                    xmlToBeSigned += `<${particularitiesObject['tags']['DescontoIncondicionado']}>` + r.servico.descontoIncondicionado + `</${particularitiesObject['tags']['DescontoIncondicionado']}>`;
+                    xmlToBeSigned += `<${particularitiesObject['tags']['descontoIncondicionado']}>` + r.servico.descontoIncondicionado + `</${particularitiesObject['tags']['descontoIncondicionado']}>`;
                 }
                 if (r.servico.descontoCondicionado && r.servico.descontoCondicionado != '') {
-                    xmlToBeSigned += `<${particularitiesObject['tags']['DescontoCondicionado']}>` + r.servico.descontoCondicionado + `</${particularitiesObject['tags']['DescontoCondicionado']}>`;
+                    xmlToBeSigned += `<${particularitiesObject['tags']['descontoCondicionado']}>` + r.servico.descontoCondicionado + `</${particularitiesObject['tags']['descontoCondicionado']}>`;
                 }
                 if (r.servico.valorLiquidoNfse && r.servico.valorLiquidoNfse != '') {
                     xmlToBeSigned += `<${particularitiesObject['tags']['valorLiquidoNfse']}>` + r.servico.valorLiquidoNfse + `</${particularitiesObject['tags']['valorLiquidoNfse']}>`;
@@ -773,7 +773,7 @@ function addSignedXml(object, cert, particularitiesObject, numeroLote) {
                     xmlToBeSigned += `<${particularitiesObject['tags']['codigoMunicipio']}>` + r.servico.codigoMunicipio + `</${particularitiesObject['tags']['codigoMunicipio']}>`;
                 }
                 if (r.naturezaOperacao && r.naturezaOperacao != '') {
-                    xmlToBeSigned += `<${particularitiesObject['tags']['ExigibilidadeIss']}>` + r.naturezaOperacao + `</${particularitiesObject['tags']['ExigibilidadeIss']}>`;
+                    xmlToBeSigned += `<${particularitiesObject['tags']['exigibilidadeIss']}>` + r.naturezaOperacao + `</${particularitiesObject['tags']['exigibilidadeIss']}>`;
                 }
                 xmlToBeSigned += `</${particularitiesObject['tags']['servico']}>`;
 
