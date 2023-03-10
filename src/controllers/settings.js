@@ -130,8 +130,8 @@ const setParticularities = (object, city) => {
             break;
         case 'chapeco':
             try {
-                object.config.producaoHomologacao === 'producao' ? particularitiesObject['webserviceUrl'] = 'https://chapeco.meumunicipio.online/abrasf/ws?wsdl' : particularitiesObject['webserviceUrl'] = 'http://nfse-teste.publica.inf.br/homologa_nfse_integracao/Services?wsdl';
-                object.config.producaoHomologacao === 'producao' ? particularitiesObject['urlXmlns'] = 'http://www.abrasf.org.br/nfse.xsd' : particularitiesObject['urlXmlns'] = 'http://nfse-teste.publica.inf.br';
+                object.config.producaoHomologacao === 'producao' ? particularitiesObject['webserviceUrl'] = 'https://chapeco.meumunicipio.online/abrasf/ws?wsdl' : particularitiesObject['webserviceUrl'] = 'https://testechapeco.meumunicipio.online/abrasf/ws?wsdl';
+                object.config.producaoHomologacao === 'producao' ? particularitiesObject['urlXmlns'] = 'http://www.abrasf.org.br/nfse.xsd' : particularitiesObject['urlXmlns'] = 'http://www.abrasf.org.br/nfse.xsd';
                 particularitiesObject['nfseKeyword'] = 'chapeco';
 
                 if (object.config.acao === 'enviarLoteRps') {
