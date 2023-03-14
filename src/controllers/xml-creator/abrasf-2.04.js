@@ -69,11 +69,23 @@ const createXml = async (object, particularitiesObject, numeroLote) => {
                             if (numeroLote) {
                                 xml += `<${particularitiesObject['tags']['numeroLoteAlterada'] ? particularitiesObject['tags']['numeroLoteAlterada'] : particularitiesObject['tags']['numeroLote']}>` + numeroLote + `</${particularitiesObject['tags']['numeroLote']}>`;
                             }
+                            
                             if (object.emissor.cpfCnpj) {
-                                xml += `<${particularitiesObject['tags']['cnpjAlterada'] ? particularitiesObject['tags']['cnpjAlterada'] : particularitiesObject['tags']['cnpj']}>` + object.emissor.cpfCnpj.replace(/[^\d]+/g, '') + `</${particularitiesObject['tags']['cnpj']}>`;
-                            }
-                            if (object.emissor.inscricaoMunicipal && object.emissor.inscricaoMunicipal != '') {
-                                xml += `<${particularitiesObject['tags']['inscricaoMunicipalAlterada'] ? particularitiesObject['tags']['inscricaoMunicipalAlterada'] : particularitiesObject['tags']['inscricaoMunicipal']}>` + object.emissor.inscricaoMunicipal + `</${particularitiesObject['tags']['inscricaoMunicipal']}>`;
+                                xml += `<${particularitiesObject['tags']['prestador']}>`;
+                                xml += `<${particularitiesObject['tags']['cpfCnpj']}>`;
+                                if (object.emissor.cpfCnpj.replace(/[^\d]+/g, '').length === 11) {
+                                    xml += `<${particularitiesObject['tags']['cpf']}>` + object.emissor.cpfCnpj.replace(/\.|\/|\-|\s/g, '') + `</${particularitiesObject['tags']['cpf']}>`;
+                                }
+        
+                                if (object.emissor.cpfCnpj.replace(/[^\d]+/g, '').length === 14) {
+                                    xml += `<${particularitiesObject['tags']['cnpj']}>` + object.emissor.cpfCnpj.replace(/[^\d]+/g, '') + `</${particularitiesObject['tags']['cnpj']}>`;
+                                }
+                                xml += `</${particularitiesObject['tags']['cpfCnpj']}>`;
+                                
+                                if (object.emissor.inscricaoMunicipal && object.emissor.inscricaoMunicipal != '') {
+                                    xml += `<${particularitiesObject['tags']['inscricaoMunicipal']}>` + object.emissor.inscricaoMunicipal + `</${particularitiesObject['tags']['inscricaoMunicipal']}>`;
+                                }
+                                xml += `</${particularitiesObject['tags']['prestador']}>`;
                             }
                             xml += `<${particularitiesObject['tags']['quantidadeRpsAlterada'] ? particularitiesObject['tags']['quantidadeRpsAlterada'] : particularitiesObject['tags']['quantidadeRps']}>` + object.rps.length + `</${particularitiesObject['tags']['quantidadeRps']}>`;
                             xml += `<${particularitiesObject['tags']['listaRpsAlterada'] ? particularitiesObject['tags']['listaRpsAlterada'] : particularitiesObject['tags']['listaRps']}>`;
@@ -173,8 +185,23 @@ const createXml = async (object, particularitiesObject, numeroLote) => {
                             if (object.emissor.cpfCnpj) {
                                 xml += `<${particularitiesObject['tags']['cnpjAlterada'] ? particularitiesObject['tags']['cnpjAlterada'] : particularitiesObject['tags']['cnpj']}>` + object.emissor.cpfCnpj.replace(/[^\d]+/g, '') + `</${particularitiesObject['tags']['cnpj']}>`;
                             }
-                            if (object.emissor.inscricaoMunicipal && object.emissor.inscricaoMunicipal != '') {
-                                xml += `<${particularitiesObject['tags']['inscricaoMunicipalAlterada'] ? particularitiesObject['tags']['inscricaoMunicipalAlterada'] : particularitiesObject['tags']['inscricaoMunicipal']}>` + object.emissor.inscricaoMunicipal + `</${particularitiesObject['tags']['inscricaoMunicipal']}>`;
+                            if (object.emissor) {
+                                xml += `<${particularitiesObject['tags']['prestador']}>`;
+                                if (prestadorCnpj) {
+                                    xml += `<${particularitiesObject['tags']['cpfCnpj']}>`;
+                                    if (r.tomador.cpfCnpj.replace(/[^\d]+/g, '').length === 11) {
+                                        xml += `<${particularitiesObject['tags']['cpf']}>` + object.emissor.cpfCnpj.replace(/\.|\/|\-|\s/g, '') + `</${particularitiesObject['tags']['cpf']}>`;
+                                    }
+            
+                                    if (r.tomador.cpfCnpj.replace(/[^\d]+/g, '').length === 14) {
+                                        xml += `<${particularitiesObject['tags']['cnpj']}>` + prestadorCnpj.replace(/[^\d]+/g, '') + `</${particularitiesObject['tags']['cnpj']}>`;
+                                    }
+                                    xml += `</${particularitiesObject['tags']['cpfCnpj']}>`;
+                                }
+                                if (prestadorIncricaoMunicipal && prestadorIncricaoMunicipal != '') {
+                                    xml += `<${particularitiesObject['tags']['inscricaoMunicipal']}>` + prestadorIncricaoMunicipal + `</${particularitiesObject['tags']['inscricaoMunicipal']}>`;
+                                }
+                                xml += `</${particularitiesObject['tags']['prestador']}>`;
                             }
                             xml += `<${particularitiesObject['tags']['quantidadeRpsAlterada'] ? particularitiesObject['tags']['quantidadeRpsAlterada'] : particularitiesObject['tags']['quantidadeRps']}>` + object.rps.length + `</${particularitiesObject['tags']['quantidadeRps']}>`;
                             xml += `<${particularitiesObject['tags']['listaRpsAlterada'] ? particularitiesObject['tags']['listaRpsAlterada'] : particularitiesObject['tags']['listaRps']}>`;
@@ -687,19 +714,22 @@ function addSignedXml(object, cert, particularitiesObject, numeroLote) {
                     // TODO verificar funcionalidade da rps alterada
                     xmlToBeSigned += `<${particularitiesObject['tags']['infRpsAlterada'] ? particularitiesObject['tags']['infRpsAlterada'] : particularitiesObject['tags']['infDeclaracaoPrestacaoServico']}>`;
                 }
+                xmlToBeSigned += `<${particularitiesObject['tags']['rps']}>`;
+
                 xmlToBeSigned += `<${particularitiesObject['tags']['identificacaoRps']}>`;
                 xmlToBeSigned += `<${particularitiesObject['tags']['numero']}>` + numeroRps + `</${particularitiesObject['tags']['numero']}>`;
                 xmlToBeSigned += `<${particularitiesObject['tags']['serie']}>` + serieRps + `</${particularitiesObject['tags']['serie']}>`;
                 if (object.emissor.cpfCnpj && object.emissor.cpfCnpj != '') {
                     xmlToBeSigned += `<${particularitiesObject['tags']['tipo']}>` + r.tipo + `</${particularitiesObject['tags']['tipo']}>`;
                 }
+                xmlToBeSigned += `</${particularitiesObject['tags']['identificacaoRps']}>`;
+
                 if (r.dataEmissao && r.dataEmissao != '') {
                     xmlToBeSigned += `<${particularitiesObject['tags']['dataEmissaoRps']}>` + r.dataEmissao.replace(/\s/g, 'T') + `</${particularitiesObject['tags']['dataEmissaoRps']}>`;
                 }
                 if (r.status && r.status != '') {
                     xmlToBeSigned += `<${particularitiesObject['tags']['status']}>` + r.status + `</${particularitiesObject['tags']['status']}>`;
                 }
-                xmlToBeSigned += `</${particularitiesObject['tags']['identificacaoRps']}>`;
                 
                 if (r.rpsSubstituido && r.rpsSubstituido.numero != '') {
                     xmlToBeSigned += `<${particularitiesObject['tags']['rpsSubstituido']}>`;
@@ -710,6 +740,7 @@ function addSignedXml(object, cert, particularitiesObject, numeroLote) {
                     }
                     xmlToBeSigned += `</${particularitiesObject['tags']['rpsSubstituido']}>`;
                 }
+                xmlToBeSigned += `</${particularitiesObject['tags']['rps']}>`;
 
                 if (r.dataEmissao && r.dataEmissao != '') {
                     xmlToBeSigned += `<${particularitiesObject['tags']['competencia']}>` + r.dataEmissao.replace(/\s/g, 'T') + `</${particularitiesObject['tags']['competencia']}>`;
@@ -773,7 +804,7 @@ function addSignedXml(object, cert, particularitiesObject, numeroLote) {
                     xmlToBeSigned += `<${particularitiesObject['tags']['codigoMunicipio']}>` + r.servico.codigoMunicipio + `</${particularitiesObject['tags']['codigoMunicipio']}>`;
                 }
                 if (r.naturezaOperacao && r.naturezaOperacao != '') {
-                    xmlToBeSigned += `<${particularitiesObject['tags']['exigibilidadeIss']}>` + r.naturezaOperacao + `</${particularitiesObject['tags']['exigibilidadeIss']}>`;
+                    xmlToBeSigned += `<${particularitiesObject['tags']['exigibilidadeISS']}>` + r.naturezaOperacao + `</${particularitiesObject['tags']['exigibilidadeISS']}>`;
                 }
                 xmlToBeSigned += `</${particularitiesObject['tags']['servico']}>`;
 
