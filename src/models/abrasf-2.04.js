@@ -22,7 +22,8 @@ const abrasf204 = {
     numero: "Numero",
     serie: "Serie",
     tipo: "Tipo",
-    dataEmissaoRps: "DataEmissaoRps",
+    // dataEmissaoRps: "DataEmissaoRps",
+    dataEmissao: "DataEmissao",
     //naturezaOperacao: "NaturezaOperacao",
     status: "Status",
 

@@ -725,7 +725,7 @@ function addSignedXml(object, cert, particularitiesObject, numeroLote) {
                 xmlToBeSigned += `</${particularitiesObject['tags']['identificacaoRps']}>`;
 
                 if (r.dataEmissao && r.dataEmissao != '') {
-                    xmlToBeSigned += `<${particularitiesObject['tags']['dataEmissaoRps']}>` + r.dataEmissao.replace(/\s/g, 'T') + `</${particularitiesObject['tags']['dataEmissaoRps']}>`;
+                    xmlToBeSigned += `<${particularitiesObject['tags']['dataEmissao']}>` + r.dataEmissao.replace(/\s/g, 'T') + `</${particularitiesObject['tags']['dataEmissao']}>`;
                 }
                 if (r.status && r.status != '') {
                     xmlToBeSigned += `<${particularitiesObject['tags']['status']}>` + r.status + `</${particularitiesObject['tags']['status']}>`;
@@ -772,9 +772,9 @@ function addSignedXml(object, cert, particularitiesObject, numeroLote) {
                 if (r.servico.valorIss && r.servico.valorIss != '') {
                     xmlToBeSigned += `<${particularitiesObject['tags']['valorIss']}>` + r.servico.valorIss + `</${particularitiesObject['tags']['valorIss']}>`;
                 }
-                if (r.servico.baseCalculo && r.servico.baseCalculo != '') {
-                    xmlToBeSigned += `<${particularitiesObject['tags']['baseCalculo']}>` + r.servico.baseCalculo + `</${particularitiesObject['tags']['baseCalculo']}>`;
-                }
+                // if (r.servico.baseCalculo && r.servico.baseCalculo != '') {
+                //     xmlToBeSigned += `<${particularitiesObject['tags']['baseCalculo']}>` + r.servico.baseCalculo + `</${particularitiesObject['tags']['baseCalculo']}>`;
+                // }
                 if (r.servico.aliquota && r.servico.aliquota != '') {
                     xmlToBeSigned += `<${particularitiesObject['tags']['aliquota']}>` + r.servico.aliquota + `</${particularitiesObject['tags']['aliquota']}>`;
                 }
@@ -784,9 +784,9 @@ function addSignedXml(object, cert, particularitiesObject, numeroLote) {
                 if (r.servico.descontoCondicionado && r.servico.descontoCondicionado != '') {
                     xmlToBeSigned += `<${particularitiesObject['tags']['descontoCondicionado']}>` + r.servico.descontoCondicionado + `</${particularitiesObject['tags']['descontoCondicionado']}>`;
                 }
-                if (r.servico.valorLiquidoNfse && r.servico.valorLiquidoNfse != '') {
-                    xmlToBeSigned += `<${particularitiesObject['tags']['valorLiquidoNfse']}>` + r.servico.valorLiquidoNfse + `</${particularitiesObject['tags']['valorLiquidoNfse']}>`;
-                }
+                // if (r.servico.valorLiquidoNfse && r.servico.valorLiquidoNfse != '') {
+                //     xmlToBeSigned += `<${particularitiesObject['tags']['valorLiquidoNfse']}>` + r.servico.valorLiquidoNfse + `</${particularitiesObject['tags']['valorLiquidoNfse']}>`;
+                // }
                 xmlToBeSigned += `</${particularitiesObject['tags']['valores']}>`;
                 if (r.servico.issRetido && r.servico.issRetido != '') {
                     xmlToBeSigned += `<${particularitiesObject['tags']['issRetido']}>` + r.servico.issRetido + `</${particularitiesObject['tags']['issRetido']}>`;
