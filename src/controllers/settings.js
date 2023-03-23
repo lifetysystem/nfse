@@ -140,7 +140,7 @@ const setParticularities = (object, city) => {
                     doNotAddPrefixesAsync(['EnviarLoteRpsEnvio', 'LoteRps'], '', particularitiesObject);
                     particularitiesObject['tags']['enviarLoteRpsEnvioAlterada'] = `${particularitiesObject['tags']['enviarLoteRpsEnvio']} xmlns="http://www.abrasf.org.br/nfse.xsd"`;
                     particularitiesObject['tags']['loteRps'] = `${particularitiesObject['tags']['loteRps']} versao="2.04"`;
-                    particularitiesObject['tags']['infDeclaracaoPrestacaoServico'] = `${particularitiesObject['tags']['infDeclaracaoPrestacaoServico']}`;
+                    particularitiesObject['tags']['infDeclaracaoPrestacaoServico'] = `${particularitiesObject['tags']['infDeclaracaoPrestacaoServico']} Id="_uniqueValue"`;
                     particularitiesObject['isSigned']['isEmptyUri'] = false;
                     particularitiesObject['envelopment'] = `<?xml version='1.0' encoding='utf-8'?><soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ws="https://abrasfchapeco.meumunicipio.online/ws"><soapenv:Header/><soapenv:Body><ws:RecepcionarLoteRps xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><xml>__xml__</xml></ws:RecepcionarLoteRps></soapenv:Body></soapenv:Envelope>`;
                     particularitiesObject['isSigned']['isDifferentSignature'] = true;
@@ -183,7 +183,7 @@ const setParticularities = (object, city) => {
                     consultarNfseRps: '/../../../resources/xsd/abrasf2.04.xsd'
                 }
                 particularitiesObject['soapActions'] = {//https://chapeco.meumunicipio.online/abrasf/ws?wsdl
-                    enviarLoteRps: 'https://chapeco.meumunicipio.online/ws#RecepcionarLoteRps'
+                    enviarLoteRps: object.config.producaoHomologacao === 'producao' ? 'https://abrasfchapeco.meumunicipio.online/ws#RecepcionarLoteRps' : 'https://testechapecoabrasf.meumunicipio.online/ws#RecepcionarLoteRps'
                 }
             } catch (error) {
                 console.error(error);
