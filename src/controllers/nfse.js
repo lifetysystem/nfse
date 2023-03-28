@@ -120,7 +120,7 @@ const setModelToSend = (city, model) => {
                             //     objectWithXml.url = 'https://chapeco.meumunicipio.online/abrasf/ws?wsdl';
                             //     objectWithXml.soapAction.replace('http://service.nfse.integracao.ws.publica', 'https://chapeco.meumunicipio.online/abrasf')
                             // }
-                            sendNfselController.webServiceRequest(objectWithXml, object)
+                            sendNfselController.webServiceRequestREST(objectWithXml, object)
                                 .then(resSentXml => {
                                     try {
                                         const result = {
@@ -159,7 +159,7 @@ const setModelToSend = (city, model) => {
                             resolve(result);
                         } else {
                             const objectWithXml = res.message;
-                            sendNfselController.webServiceRequest(objectWithXml, object)
+                            sendNfselController.webServiceRequestREST(objectWithXml, object)
                                 .then(resSentXml => {
                                     const result = {
                                         request: res,
@@ -194,7 +194,7 @@ const setModelToSend = (city, model) => {
                             //     objectWithXml.url = 'https://chapeco.meumunicipio.online/abrasf/ws?wsdl';
                             //     objectWithXml.soapAction.replace('http://service.nfse.integracao.ws.publica', 'https://chapeco.meumunicipio.online/abrasf')
                             // }
-                            sendNfselController.webServiceRequest(objectWithXml, object)
+                            sendNfselController.webServiceRequestSOAP(objectWithXml, object)
                                 .then(resSentXml => {
                                     try {
                                         const result = {
@@ -234,7 +234,7 @@ const setModelToSend = (city, model) => {
                         } else {
                             const objectWithXml = res.message;
                             
-                            sendNfselController.webServiceRequest(objectWithXml, object)
+                            sendNfselController.webServiceRequestREST(objectWithXml, object)
                                 .then(resSentXml => {
                                     const result = {
                                         request: res,
