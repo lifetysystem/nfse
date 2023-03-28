@@ -87,6 +87,7 @@ function webServiceRequestSOAP(xmlData, object) {
                 const certificatePassword = object.config.senhaDoCertificado;
                 const webserviceRetry = object.config.insistirNoWebservice;
                 
+                var args = {_xml: xmlData.xml.replace(/<xml>|<\/xml>/g, '')}
                 soap.createClient(url, {}, function(err, client) {
                     client.MyFunction(args, function(err, result) {
                         console.log(result);

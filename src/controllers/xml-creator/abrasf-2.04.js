@@ -141,7 +141,8 @@ const createXml = async (object, particularitiesObject, numeroLote) => {
 
                                                 const result = {
                                                     url: particularitiesObject['webserviceUrl'],
-                                                    soapEnvelop: xml
+                                                    soapEnvelop: xml,
+                                                    xml: xmlSignature
                                                 }
                                                 if (particularitiesObject['soapActions'] && particularitiesObject['soapActions']['enviarLoteRps']) {
                                                     result['soapAction'] = particularitiesObject['soapActions']['enviarLoteRps'];
