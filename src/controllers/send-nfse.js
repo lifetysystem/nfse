@@ -1,162 +1,189 @@
 // Vendors
-const request = require('request');
-const soap = require('soap');
-const fs = require('fs');
+const request = require("request");
+const soap = require("soap");
+const fs = require("fs");
+const  parseString = require("xml2js").parseString;
 
 function webServiceRequestREST(xmlData, object) {
-    try {
-        return new Promise((resolve, reject) => {
-            try {
-                const xmlEnveloped = xmlData.soapEnvelop;
-                const url = xmlData.url;
-                const soapAction = xmlData.soapAction;
-                const certificatePath = object.config.diretorioDoCertificado;
-                const certificatePassword = object.config.senhaDoCertificado;
-                const webserviceRetry = object.config.insistirNoWebservice;
-                
-                var options = {
-                    method: 'POST',
-                    url: url,
-                    agentOptions: {
-                        pfx: fs.readFileSync(certificatePath),
-                        passphrase: certificatePassword,
-                    },
-                    headers: {
-                        "Accept": "text/xml",
-                        "Content-Type": "text/xml;charset=UTF-8"
-                    },
-                    body: xmlEnveloped,
-                    pool: {maxSockets: Infinity}
-                };
+  try {
+    return new Promise((resolve, reject) => {
+      try {
+        const xmlEnveloped = xmlData.soapEnvelop;
+        const url = xmlData.url;
+        const soapAction = xmlData.soapAction;
+        const certificatePath = object.config.diretorioDoCertificado;
+        const certificatePassword = object.config.senhaDoCertificado;
+        const webserviceRetry = object.config.insistirNoWebservice;
 
-                if (soapAction) {
-                    options.headers = {
-                        "Accept": "text/xml",
-                        "Content-Type": "text/xml;charset=UTF-8",
-                        "SOAPAction": soapAction,
-                    }
+        var options = {
+          method: "POST",
+          url: url,
+          agentOptions: {
+            pfx: fs.readFileSync(certificatePath),
+            passphrase: certificatePassword,
+          },
+          headers: {
+            Accept: "text/xml",
+            "Content-Type": "text/xml;charset=UTF-8",
+          },
+          body: xmlEnveloped,
+          pool: { maxSockets: Infinity },
+        };
+
+        if (soapAction) {
+          options.headers = {
+            Accept: "text/xml",
+            "Content-Type": "text/xml;charset=UTF-8",
+            SOAPAction: soapAction,
+          };
+        }
+
+        request(options, function (error, response, body) {
+          if (response && response.statusCode === 404) {
+            const result = {
+              message: "Webservice não foi encontrado",
+              error: response.statusCode + " - " + response.statusMessage,
+            };
+
+            reject(result);
+          }
+          if (error) {
+            const result = {
+              message: "Verifique se o webservice está online: " + url,
+              error: error["message"],
+            };
+
+            if (result.error.code === "ECONNRESET") {
+              setTimeout(() => {
+                if (webserviceRetry) {
+                  webServiceRequest(
+                    xmlEnveloped,
+                    url,
+                    soapAction,
+                    certificatePath,
+                    certificatePassword
+                  );
+                } else {
+                  resolve(result);
                 }
-                
-                request(options, function (error, response, body) {
-                    if (response && response.statusCode === 404)  {
-                        const result = {
-                            message: 'Webservice não foi encontrado',
-                            error: response.statusCode + " - " + response.statusMessage
-                        };
-
-                        reject(result);
-                    }
-                    if (error) {
-                        const result = {
-                            message: 'Verifique se o webservice está online: ' + url,
-                            error: error['message']
-                        };
-                        
-                        if (result.error.code === 'ECONNRESET') {
-                            setTimeout(() => {
-                                if (webserviceRetry) {
-                                    webServiceRequest(xmlEnveloped, url, soapAction, certificatePath, certificatePassword);
-                                } else {
-                                    resolve(result);
-                                }
-                            }, 20000)
-                        } else {
-                            reject(result);
-                        }
-                    }
-                    resolve(response);
-                });
-            } catch (error) {
-                console.error(error);
-                reject(error);
+              }, 20000);
+            } else {
+              reject(result);
             }
-        })        
-    } catch (error) {
+          }
+          resolve(response);
+        });
+      } catch (error) {
         console.error(error);
-    }
+        reject(error);
+      }
+    });
+  } catch (error) {
+    console.error(error);
+  }
 }
 
 function webServiceRequestSOAP(xmlData, object) {
-    try {
-        return new Promise((resolve, reject) => {
-            try {
-                const xmlEnveloped = xmlData.soapEnvelop;
-                const url = xmlData.url;
-                const soapAction = xmlData.soapAction;
-                const certificatePath = object.config.diretorioDoCertificado;
-                const certificatePassword = object.config.senhaDoCertificado;
-                const webserviceRetry = object.config.insistirNoWebservice;
-                
-                var args = {_xml: xmlData.xml.replace(/<xml>|<\/xml>/g, '')}
-                soap.createClient(url, {}, function(err, client) {
-                    client.MyFunction(args, function(err, result) {
-                        console.log(result);
-                        resolve(result);
-                    });
+  try {
+    return new Promise((resolve, reject) => {
+      try {
+        const xmlEnveloped = xmlData.soapEnvelop;
+        const url = xmlData.url;
+        const soapAction = xmlData.soapAction;
+        const certificatePath = object.config.diretorioDoCertificado;
+        const certificatePassword = object.config.senhaDoCertificado;
+        const webserviceRetry = object.config.insistirNoWebservice;
+
+        var args = { xml: xmlEnveloped };
+        soap.createClient(url, {}, function (err, client) {
+          client.AbrasfService.AbrasfPort.GerarNfse(
+            args,
+            function (err, result) {
+              if (err !== null) {
+                reject(err);
+              }
+              
+              if (result.GerarNfseResult) {
+                parseString(result.GerarNfseResult, (err, results) => {
+
+                    if (results.GerarNfseResposta.hasOwnProperty('ListaMensagemRetorno')) {
+                        const error = results.GerarNfseResposta.ListaMensagemRetorno[0].MensagemRetorno[0].Mensagem[0];
+                        resolve(error);
+                    } else {
+                        const info = results.GerarNfseResposta.ListaNfse[0].CompNfse[0].Nfse[0].InfNfse[0];
+                        //const link = results.GerarNfseResposta.ListaNfse[0].CompNfse[0].Nfse[0].InfNfse[0].LinkNota[0];
+                        resolve(info);
+                    }
                 });
-                // var options = {
-                //     method: 'POST',
-                //     url: url,
-                //     agentOptions: {
-                //         pfx: fs.readFileSync(certificatePath),
-                //         passphrase: certificatePassword,
-                //     },
-                //     headers: {
-                //         "Accept": "text/xml",
-                //         "Content-Type": "text/xml;charset=UTF-8"
-                //     },
-                //     body: xmlEnveloped,
-                //     pool: {maxSockets: Infinity}
-                // };
-
-                // if (soapAction) {
-                //     options.headers = {
-                //         "Accept": "text/xml",
-                //         "Content-Type": "text/xml;charset=UTF-8",
-                //         "SOAPAction": soapAction,
-                //     }
-                // }
-                
-                // request(options, function (error, response, body) {
-                //     if (response && response.statusCode === 404)  {
-                //         const result = {
-                //             message: 'Webservice não foi encontrado',
-                //             error: response.statusCode + " - " + response.statusMessage
-                //         };
-
-                //         reject(result);
-                //     }
-                //     if (error) {
-                //         const result = {
-                //             message: 'Verifique se o webservice está online: ' + url,
-                //             error: error['message']
-                //         };
-                        
-                //         if (result.error.code === 'ECONNRESET') {
-                //             setTimeout(() => {
-                //                 if (webserviceRetry) {
-                //                     webServiceRequest(xmlEnveloped, url, soapAction, certificatePath, certificatePassword);
-                //                 } else {
-                //                     resolve(result);
-                //                 }
-                //             }, 20000)
-                //         } else {
-                //             reject(result);
-                //         }
-                //     }
-                //     resolve(response);
-                // });
-            } catch (error) {
-                console.error(error);
-                reject(error);
+            } else {
+                resolve({ error: 'Erro no servidor' });
             }
-        })        
-    } catch (error) {
+            }
+          );
+        });
+        // var options = {
+        //     method: 'POST',
+        //     url: url,
+        //     agentOptions: {
+        //         pfx: fs.readFileSync(certificatePath),
+        //         passphrase: certificatePassword,
+        //     },
+        //     headers: {
+        //         "Accept": "text/xml",
+        //         "Content-Type": "text/xml;charset=UTF-8"
+        //     },
+        //     body: xmlEnveloped,
+        //     pool: {maxSockets: Infinity}
+        // };
+
+        // if (soapAction) {
+        //     options.headers = {
+        //         "Accept": "text/xml",
+        //         "Content-Type": "text/xml;charset=UTF-8",
+        //         "SOAPAction": soapAction,
+        //     }
+        // }
+
+        // request(options, function (error, response, body) {
+        //     if (response && response.statusCode === 404)  {
+        //         const result = {
+        //             message: 'Webservice não foi encontrado',
+        //             error: response.statusCode + " - " + response.statusMessage
+        //         };
+
+        //         reject(result);
+        //     }
+        //     if (error) {
+        //         const result = {
+        //             message: 'Verifique se o webservice está online: ' + url,
+        //             error: error['message']
+        //         };
+
+        //         if (result.error.code === 'ECONNRESET') {
+        //             setTimeout(() => {
+        //                 if (webserviceRetry) {
+        //                     webServiceRequest(xmlEnveloped, url, soapAction, certificatePath, certificatePassword);
+        //                 } else {
+        //                     resolve(result);
+        //                 }
+        //             }, 20000)
+        //         } else {
+        //             reject(result);
+        //         }
+        //     }
+        //     resolve(response);
+        // });
+      } catch (error) {
         console.error(error);
-    }
+        reject(error);
+      }
+    });
+  } catch (error) {
+    console.error(error);
+  }
 }
 
 module.exports = {
-    webServiceRequestREST,
-    webServiceRequestSOAP
-}
+  webServiceRequestREST,
+  webServiceRequestSOAP,
+};
