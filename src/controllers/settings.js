@@ -139,42 +139,43 @@ const setParticularities = (object, city) => {
                     addPrefixesAsync(['EnviarLoteRpsEnvio', 'LoteRps'], '', particularitiesObject);
                     doNotAddPrefixesAsync(['EnviarLoteRpsEnvio', 'LoteRps'], '', particularitiesObject);
                     particularitiesObject['tags']['enviarLoteRpsEnvioAlterada'] = `${particularitiesObject['tags']['enviarLoteRpsEnvio']} xmlns="http://www.abrasf.org.br/nfse.xsd"`;
-                    particularitiesObject['tags']['loteRps'] = `${particularitiesObject['tags']['loteRps']} versao="2.04"`;
-                    particularitiesObject['tags']['infDeclaracaoPrestacaoServico'] = `${particularitiesObject['tags']['infDeclaracaoPrestacaoServico']} Id="_uniqueValue"`;
+                    particularitiesObject['tags']['loteRps'] = `${particularitiesObject['tags']['loteRps']}`;
+                    particularitiesObject['tags']['infDeclaracaoPrestacaoServico'] = `${particularitiesObject['tags']['infDeclaracaoPrestacaoServico']}`;
                     particularitiesObject['isSigned']['isEmptyUri'] = false;
-                    particularitiesObject['envelopment'] = `<?xml version='1.0' encoding='utf-8'?><soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ws="https://abrasfchapeco.meumunicipio.online/ws"><soapenv:Header/><soapenv:Body><ws:RecepcionarLoteRps xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><xml>__xml__</xml></ws:RecepcionarLoteRps></soapenv:Body></soapenv:Envelope>`;
+                    particularitiesObject['envelopment'] = `<?xml version="1.0" encoding="utf-8"?>__xml__`;
+                    //particularitiesObject['envelopment'] = `<?xml version='1.0' encoding='utf-8'?><soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ws="https://abrasfchapeco.meumunicipio.online/ws"><soapenv:Header/><soapenv:Body><ws:RecepcionarLoteRps xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><xml>__xml__</xml></ws:RecepcionarLoteRps></soapenv:Body></soapenv:Envelope>`;
                     particularitiesObject['isSigned']['isDifferentSignature'] = true;
                     particularitiesObject['isSigned']['infDeclaracaoPrestacaoServico'] = false;
                     //  particularitiesObject['isSigned']['signatureId'] = 'dsig'
                 }
 
                 if (object.config.acao === 'consultarLoteRps') {
-                    particularitiesObject['tags'] = {...abrasf100Model.abrasf100};
+                    particularitiesObject['tags'] = {...abrasf204Model.abrasf204};
                     addPrefixesAsync(['ConsultarLoteRpsEnvio', 'Prestador', 'Protocolo'], '', particularitiesObject);
                     doNotAddPrefixesAsync(['ConsultarLoteRpsEnvio', 'Prestador', 'Protocolo'], '', particularitiesObject);
-                    particularitiesObject['tags']['consultarLoteRpsEnvioAlterada'] = `${particularitiesObject['tags']['consultarLoteRpsEnvio']}  xmlns="http://www.publica.inf.br" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.publica.inf.br schema_nfse_v03.xsd"`;
-                    particularitiesObject['envelopment'] = `<?xml version='1.0' encoding='utf-8'?><soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"><soapenv:Header/><soapenv:Body><rpcOp:ConsultarLoteRps xmlns:rpcOp="http://service.nfse.integracao.ws.publica/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><XML>__xml__</XML></rpcOp:ConsultarLoteRps></soapenv:Body></soapenv:Envelope>`;
-                    particularitiesObject['isSigned']['consultarLoteRps'] = true;
+                    particularitiesObject['tags']['consultarLoteRpsEnvioAlterada'] = `${particularitiesObject['tags']['consultarLoteRpsEnvio']}  xmlns="http://www.abrasf.org.br/nfse.xsd"`;
+                    particularitiesObject['envelopment'] = `<?xml version="1.0" encoding="utf-8"?>__xml__`;
+                    particularitiesObject['isSigned']['consultarLoteRps'] = false;
                 }
 
                 if (object.config.acao === 'consultarNfsePorRps') {
-                    particularitiesObject['tags'] = {...abrasf100Model.abrasf100};
+                    particularitiesObject['tags'] = {...abrasf204Model.abrasf204};
                     addPrefixesAsync(['ConsultarNfseRpsEnvio', 'Prestador', 'IdentificacaoRps'], '', particularitiesObject);
                     doNotAddPrefixesAsync(['ConsultarNfseRpsEnvio', 'Prestador', 'IdentificacaoRps'], '', particularitiesObject);
-                    particularitiesObject['tags']['consultarNfseRpsEnvioAlterada'] = `${particularitiesObject['tags']['consultarNfseRpsEnvio']}  xmlns="http://www.publica.inf.br" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.publica.inf.br schema_nfse_v03.xsd"`;
-                    particularitiesObject['envelopment'] = `<?xml version='1.0' encoding='utf-8'?><soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"><soapenv:Header/><soapenv:Body><rpcOp:ConsultarNfsePorRps xmlns:rpcOp="http://service.nfse.integracao.ws.publica/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><XML>__xml__</XML></rpcOp:ConsultarNfsePorRps></soapenv:Body></soapenv:Envelope>`;
-                    particularitiesObject['isSigned']['consultarNfseRps'] = true;
+                    particularitiesObject['tags']['consultarNfseRpsEnvioAlterada'] = `${particularitiesObject['tags']['consultarNfseRpsEnvio']} xmlns="http://www.abrasf.org.br/nfse.xsd"`;
+                    particularitiesObject['envelopment'] = `<?xml version="1.0" encoding="utf-8"?>__xml__`;
+                    particularitiesObject['isSigned']['consultarNfseRps'] = false;
                     particularitiesObject['isSigned']['isEmptyUri'] = true;
                 }
 
                 if (object.config.acao === 'cancelarNfse') {
-                    particularitiesObject['tags'] = {...abrasf201Model.abrasf201};
+                    particularitiesObject['tags'] = {...abrasf204Model.abrasf204};
                     addPrefixesAsync(['CancelarNfseEnvio', 'Prestador', 'NumeroNfse'], '', particularitiesObject);
                     doNotAddPrefixesAsync(['CancelarNfseEnvio', 'Prestador', 'NumeroNfse'], '', particularitiesObject);
-                    particularitiesObject['tags']['cancelarNfseEnvioAlterada'] = `${particularitiesObject['tags']['cancelarNfseEnvio']}  xmlns="http://www.publica.inf.br" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.publica.inf.br schema_nfse_v03.xsd"`;
-                    particularitiesObject['envelopment'] = `<?xml version='1.0' encoding='utf-8'?><soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"><soapenv:Header/><soapenv:Body><rpcOp:CancelarNfse xmlns:rpcOp="http://service.nfse.integracao.ws.publica/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><XML>__xml__</XML></rpcOp:CancelarNfse></soapenv:Body></soapenv:Envelope>`;
+                    particularitiesObject['tags']['cancelarNfseEnvioAlterada'] = `${particularitiesObject['tags']['cancelarNfseEnvio']}  xmlns="http://www.abrasf.org.br/nfse.xsd"`;
+                    particularitiesObject['envelopment'] = `<?xml version="1.0" encoding="utf-8"?>__xml__`;
                     particularitiesObject['isSigned']['cancelarNfse'] = true;
-                    particularitiesObject['isSigned']['isEmptyUri'] = true;
+                    particularitiesObject['isSigned']['isEmptyUri'] = false;
                 }
 
                 particularitiesObject['xsds'] = {

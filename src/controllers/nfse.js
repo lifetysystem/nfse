@@ -32,11 +32,7 @@ const nfse = (newObject) => {
         findModelByKeywordAsync(city.nfseKeyword);
         setModelToSend(city, model)
             .then(res => {
-                const result = {
-                    request: res.request,
-                    response: res.response
-                }
-                resolve(result);
+                resolve(res);
             })
             .catch(rej => {
                 console.error(rej);
@@ -197,18 +193,9 @@ const setModelToSend = (city, model) => {
                             sendNfselController.webServiceRequestSOAP(objectWithXml, object)
                                 .then(resSentXml => {
                                     try {
-                                        const result = {
-                                            request: res,
-                                            response: resSentXml.body.replace(regexLT, '<').replace(regexGT, '>').replace(regexQuot, '"')
-                                        };
-                                        resolve(result);
+                                        resolve(resSentXml);
                                     } catch (error) {
-                                        const result = {
-                                            request: res,
-                                            response: error
-                                        };
-
-                                        reject(result);
+                                        reject(error);
                                     }
                                     
                                 })

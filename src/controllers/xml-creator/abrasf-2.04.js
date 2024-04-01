@@ -65,7 +65,7 @@ const createXml = async (object, particularitiesObject, numeroLote) => {
                             let regexUnique = new RegExp('_uniqueValue', 'g');
 
                             let xml = `<${particularitiesObject['tags']['enviarLoteRpsEnvioAlterada'] ? particularitiesObject['tags']['enviarLoteRpsEnvioAlterada'] : particularitiesObject['tags']['enviarLoteRpsEnvio']}>`;
-                            xml += `<${particularitiesObject['tags']['loteRpsAlterada'] ? particularitiesObject['tags']['loteRpsAlterada'] : particularitiesObject['tags']['loteRps']}>`;
+                            xml += `<${particularitiesObject['tags']['loteRpsAlterada'] ? particularitiesObject['tags']['loteRpsAlterada'] : particularitiesObject['tags']['loteRps']} versao="2.04">`;
                             if (numeroLote) {
                                 xml += `<${particularitiesObject['tags']['numeroLoteAlterada'] ? particularitiesObject['tags']['numeroLoteAlterada'] : particularitiesObject['tags']['numeroLote']}>` + numeroLote + `</${particularitiesObject['tags']['numeroLote']}>`;
                             }
@@ -179,7 +179,7 @@ const createXml = async (object, particularitiesObject, numeroLote) => {
                             let regexUnique = new RegExp('_uniqueValue', 'g');
 
                             let xml = `<${particularitiesObject['tags']['gerarNfseEnvioAlterada'] ? particularitiesObject['tags']['gerarNfseEnvioAlterada'] : particularitiesObject['tags']['gerarNfseEnvio']}>`;
-                            xml += `<${particularitiesObject['tags']['loteRpsAlterada'] ? particularitiesObject['tags']['loteRpsAlterada'] : particularitiesObject['tags']['loteRps']}>`;
+                            xml += `<${particularitiesObject['tags']['loteRpsAlterada'] ? particularitiesObject['tags']['loteRpsAlterada'] : particularitiesObject['tags']['loteRps']} versao="2.04>`;
                             if (numeroLote) {
                                 xml += `<${particularitiesObject['tags']['numeroLoteAlterada'] ? particularitiesObject['tags']['numeroLoteAlterada'] : particularitiesObject['tags']['numeroLote']}>` + numeroLote + `</${particularitiesObject['tags']['numeroLote']}>`;
                             }
@@ -293,12 +293,13 @@ const createXml = async (object, particularitiesObject, numeroLote) => {
                             let uniqueValue = numeroLote;
                             let regexUnique = new RegExp('_uniqueValue', 'g');
 
-
                             let xmlNotSigned = `<${particularitiesObject['tags']['pedidoAlterada'] ? particularitiesObject['tags']['pedidoAlterada'] : particularitiesObject['tags']['pedido']}>`;
                             xmlNotSigned += `<${particularitiesObject['tags']['infPedidoCancelamentoAlterada'] ? particularitiesObject['tags']['infPedidoCancelamentoAlterada'] : particularitiesObject['tags']['infPedidoCancelamento']}>`;
                             xmlNotSigned += `<${particularitiesObject['tags']['identificacaoNfseAlterada'] ? particularitiesObject['tags']['identificacaoNfseAlterada'] : particularitiesObject['tags']['identificacaoNfse']}>`;
                             xmlNotSigned += `<${particularitiesObject['tags']['numeroAlterada'] ? particularitiesObject['tags']['numeroAlterada'] : particularitiesObject['tags']['numero']}>${object.numeroNfse}</${particularitiesObject['tags']['numero']}>`;
+                            xmlNotSigned += `<${particularitiesObject['tags']['cpfCnpj']}>`;
                             xmlNotSigned += `<${particularitiesObject['tags']['cnpjAlterada'] ? particularitiesObject['tags']['cnpjAlterada'] : particularitiesObject['tags']['cnpj']}>${object.prestador.cpfCnpj}</${particularitiesObject['tags']['cnpj']}>`;
+                            xmlNotSigned += `</${particularitiesObject['tags']['cpfCnpj']}>`;
                             if (object.prestador.inscricaoMunicipal && object.prestador.inscricaoMunicipal != '') {
                                 xmlNotSigned += `<${particularitiesObject['tags']['inscricaoMunicipalAlterada'] ? particularitiesObject['tags']['inscricaoMunicipalAlterada'] : particularitiesObject['tags']['inscricaoMunicipal']}>${object.prestador.inscricaoMunicipal}</${particularitiesObject['tags']['inscricaoMunicipal']}>`;
                             }
@@ -313,6 +314,7 @@ const createXml = async (object, particularitiesObject, numeroLote) => {
                             xmlNotSigned += `</${particularitiesObject['tags']['pedido']}>`;
 
                             xmlNotSigned = xmlNotSigned.replace(regexUnique, uniqueValue);
+
                             createSignature(xmlNotSigned, cert, 'InfPedidoCancelamento', particularitiesObject['isSigned']['signatureId'], null)
                                 .then(xmlSignature => {
                                     // if (particularitiesObject['xsds']['cancelarNfse']) {
@@ -361,6 +363,7 @@ const createXml = async (object, particularitiesObject, numeroLote) => {
                                     resolve(result);
                                 }).catch(err => {
                                     console.error(err);
+                                    reject(err);
                                 });
                         });
 
@@ -380,7 +383,9 @@ const createXml = async (object, particularitiesObject, numeroLote) => {
 
                             let xmlNotSigned = `<${particularitiesObject['tags']['consultarLoteRpsEnvioAlterada'] ? particularitiesObject['tags']['consultarLoteRpsEnvioAlterada'] : particularitiesObject['tags']['consultarLoteRpsEnvio']}>`;
                             xmlNotSigned += `<${particularitiesObject['tags']['prestadorAlterada'] ? particularitiesObject['tags']['prestadorAlterada'] : particularitiesObject['tags']['prestador']}>`;
+                            xmlNotSigned += `<${particularitiesObject['tags']['cpfCnpj']}>`;
                             xmlNotSigned += `<${particularitiesObject['tags']['cnpjAlterada'] ? particularitiesObject['tags']['cnpjAlterada'] : particularitiesObject['tags']['cnpj']}>${object.prestador.cpfCnpj.replace(/\.|\/|\-|\s/g, '')}</${particularitiesObject['tags']['cnpj']}>`;
+                            xmlNotSigned += `</${particularitiesObject['tags']['cpfCnpj']}>`;
                             if (object.prestador.inscricaoMunicipal && object.prestador.inscricaoMunicipal != '') {
                                 xmlNotSigned += `<${particularitiesObject['tags']['inscricaoMunicipalAlterada'] ? particularitiesObject['tags']['inscricaoMunicipalAlterada'] : particularitiesObject['tags']['inscricaoMunicipal']}>${object.prestador.inscricaoMunicipal}</${particularitiesObject['tags']['inscricaoMunicipal']}>`;
                             }
@@ -456,7 +461,9 @@ const createXml = async (object, particularitiesObject, numeroLote) => {
                             xmlNotSigned += `</${particularitiesObject['tags']['identificacaoRps']}>`;
 
                             xmlNotSigned += `<${particularitiesObject['tags']['prestadorAlterada'] ? particularitiesObject['tags']['prestadorAlterada'] : particularitiesObject['tags']['prestador']}>`;
+                            xmlNotSigned += `<${particularitiesObject['tags']['cpfCnpj']}>`;
                             xmlNotSigned += `<${particularitiesObject['tags']['cnpjAlterada'] ? particularitiesObject['tags']['cnpjAlterada'] : particularitiesObject['tags']['cnpj']}>${object.prestador.cpfCnpj.replace(/\.|\/|\-|\s/g, '')}</${particularitiesObject['tags']['cnpj']}>`;
+                            xmlNotSigned += `</${particularitiesObject['tags']['cpfCnpj']}>`;
                             if (object.prestador.inscricaoMunicipal && object.prestador.inscricaoMunicipal != '') {
                                 xmlNotSigned += `<${particularitiesObject['tags']['inscricaoMunicipalAlterada'] ? particularitiesObject['tags']['inscricaoMunicipalAlterada'] : particularitiesObject['tags']['inscricaoMunicipal']}>${object.prestador.inscricaoMunicipal}</${particularitiesObject['tags']['inscricaoMunicipal']}>`;
                             }
@@ -710,10 +717,9 @@ function addSignedXml(object, cert, particularitiesObject, numeroLote) {
                     }
                 }
                 xmlToBeSigned += `<Rps>`;
-                console.log( particularitiesObject['tags']['rps']);
                 if (object.emissor.cpfCnpj && object.emissor.cpfCnpj != '') {
                     // TODO verificar funcionalidade da rps alterada
-                    xmlToBeSigned += `<${particularitiesObject['tags']['infRpsAlterada'] ? particularitiesObject['tags']['infRpsAlterada'] : particularitiesObject['tags']['infDeclaracaoPrestacaoServico']}>`;
+                    xmlToBeSigned += `<${particularitiesObject['tags']['infRpsAlterada'] ? particularitiesObject['tags']['infRpsAlterada'] : particularitiesObject['tags']['infDeclaracaoPrestacaoServico']} Id="_uniqueValue">`;
                 }
                 xmlToBeSigned += `<${particularitiesObject['tags']['rps']}>`;
 
@@ -890,6 +896,9 @@ function addSignedXml(object, cert, particularitiesObject, numeroLote) {
                     }
                     if (r.incentivadorCultural && r.incentivadorCultural != '') {
                         xmlToBeSigned += `<${particularitiesObject['tags']['incentivoFiscal']}>` + r.incentivadorCultural + `</${particularitiesObject['tags']['incentivoFiscal']}>`;
+                    }
+                    if (r.informacoesComplementares && r.informacoesComplementares != '') {
+                        xmlToBeSigned += `<${particularitiesObject['tags']['informacoesComplementares']}>` + r.informacoesComplementares + `</${particularitiesObject['tags']['informacoesComplementares']}>`;
                     }
                 }
                 xmlToBeSigned += `</${particularitiesObject['tags']['infDeclaracaoPrestacaoServico'] || particularitiesObject['tags']['infRps']}>`;

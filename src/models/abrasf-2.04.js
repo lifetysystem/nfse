@@ -8,6 +8,7 @@ const abrasf204 = {
     numeroLote: "NumeroLote",
     prestador: "Prestador",
     cpfCnpj: "CpfCnpj",
+    infPedidoCancelamento: "InfPedidoCancelamento",
     cpf: "Cpf",
     cnpj: "Cnpj",
     inscricaoMunicipal: "InscricaoMunicipal",
@@ -47,17 +48,17 @@ const abrasf204 = {
     valTotTributos: "ValTotTributos",
     valorIss: "ValorIss",
     aliquota: "Aliquota",
-    valorLiquidoNfse: "ValorLiquidoNfse",
+    //valorLiquidoNfse: "ValorLiquidoNfse",
     descontoIncondicionado: "DescontoIncondicionado",
     descontoCondicionado: "DescontoCondicionado",
 
     // valorIssRetido: "ValorIssRetido",
     issRetido: "IssRetido",
     responsavelRetencao: "ResponsavelRetencao",
-    baseCalculo: "BaseCalculo",
+    //baseCalculo: "BaseCalculo",
     itemListaServico: "ItemListaServico",
     codigoCnae: "CodigoCnae",
-    codigoTributacaoMunicipio: "CodigoTributacaoMunicipio",
+    //codigoTributacaoMunicipio: "CodigoTributacaoMunicipio",
     discriminacao: "Discriminacao",
     codigoMunicipio: "CodigoMunicipio",
     codigoPais: "CodigoPais",
@@ -76,7 +77,6 @@ const abrasf204 = {
     cpf: "Cpf",
     cnpj: "Cnpj",
     razaoSocial: "RazaoSocial",
-    endereco: "Endereco",
     endereco: "Endereco",
     numero: "Numero",
     complemento: "Complemento",
@@ -100,11 +100,11 @@ const abrasf204 = {
     // contrucaoCivil: "ContrucaoCivil",
     // codigoObra: "CodigoObra",
     // art: "Art",
-    // protocolo: "Protocolo",
+    protocolo: "Protocolo",
     // infPedidoCancelamento: "InfPedidoCancelamento",
-    // pedido: "Pedido",
-    // identificacaoNfse: "IdentificacaoNfse",
-    // codigoCancelamento: "CodigoCancelamento"
+    pedido: "Pedido",
+    identificacaoNfse: "IdentificacaoNfse",
+    codigoCancelamento: "CodigoCancelamento"
 };
 
 module.exports = {
