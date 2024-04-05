@@ -193,9 +193,17 @@ const setModelToSend = (city, model) => {
                             sendNfselController.webServiceRequestSOAP(objectWithXml, object)
                                 .then(resSentXml => {
                                     try {
-                                        resolve(resSentXml);
+                                        const result = {
+                                            request: res,
+                                            response: resSentXml.replace(regexLT, '<').replace(regexGT, '>').replace(regexQuot, '"')
+                                        };
+                                        resolve(result);
                                     } catch (error) {
-                                        reject(error);
+                                        const result = {
+                                            request: res,
+                                            response: error
+                                        };
+                                        reject(result);
                                     }
                                     
                                 })

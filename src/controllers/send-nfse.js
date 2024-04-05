@@ -96,83 +96,32 @@ function webServiceRequestSOAP(xmlData, object) {
 
         var args = { xml: xmlEnveloped };
         soap.createClient(url, {}, function (err, client) {
-          client.AbrasfService.AbrasfPort.GerarNfse(
-            args,
-            function (err, result) {
-              if (err !== null) {
-                reject(err);
-              }
-              
-              if (result.GerarNfseResult) {
-                parseString(result.GerarNfseResult, (err, results) => {
-
-                    if (results.GerarNfseResposta.hasOwnProperty('ListaMensagemRetorno')) {
-                        const error = results.GerarNfseResposta.ListaMensagemRetorno[0].MensagemRetorno[0].Mensagem[0];
-                        resolve(error);
-                    } else {
-                        const info = results.GerarNfseResposta.ListaNfse[0].CompNfse[0].Nfse[0].InfNfse[0];
-                        //const link = results.GerarNfseResposta.ListaNfse[0].CompNfse[0].Nfse[0].InfNfse[0].LinkNota[0];
-                        resolve(info);
-                    }
-                });
-            } else {
-                resolve({ error: 'Erro no servidor' });
-            }
-            }
-          );
+          switch(object.config.acao) {
+            case 'enviarLoteRps':
+              client.AbrasfService.AbrasfPort.RecepcionarLoteRps(
+                args,
+                function (err, result) {
+                  if (err !== null) {
+                    reject(err);
+                  }
+                  
+                  if (result.RecepcionarLoteRpsResult) {
+                    resolve(result.RecepcionarLoteRpsResult);
+                  } else {
+                    resolve({ error: 'Erro no servidor' });
+                  }
+                }
+              );
+              break;
+            default:
+              const result = {
+                  message: 'Ação não configurada para envio de SOAP',
+                  error: 'Ação não configurada para envio de SOAP'
+              };
+              reject(result);
+              break;
+          }
         });
-        // var options = {
-        //     method: 'POST',
-        //     url: url,
-        //     agentOptions: {
-        //         pfx: fs.readFileSync(certificatePath),
-        //         passphrase: certificatePassword,
-        //     },
-        //     headers: {
-        //         "Accept": "text/xml",
-        //         "Content-Type": "text/xml;charset=UTF-8"
-        //     },
-        //     body: xmlEnveloped,
-        //     pool: {maxSockets: Infinity}
-        // };
-
-        // if (soapAction) {
-        //     options.headers = {
-        //         "Accept": "text/xml",
-        //         "Content-Type": "text/xml;charset=UTF-8",
-        //         "SOAPAction": soapAction,
-        //     }
-        // }
-
-        // request(options, function (error, response, body) {
-        //     if (response && response.statusCode === 404)  {
-        //         const result = {
-        //             message: 'Webservice não foi encontrado',
-        //             error: response.statusCode + " - " + response.statusMessage
-        //         };
-
-        //         reject(result);
-        //     }
-        //     if (error) {
-        //         const result = {
-        //             message: 'Verifique se o webservice está online: ' + url,
-        //             error: error['message']
-        //         };
-
-        //         if (result.error.code === 'ECONNRESET') {
-        //             setTimeout(() => {
-        //                 if (webserviceRetry) {
-        //                     webServiceRequest(xmlEnveloped, url, soapAction, certificatePath, certificatePassword);
-        //                 } else {
-        //                     resolve(result);
-        //                 }
-        //             }, 20000)
-        //         } else {
-        //             reject(result);
-        //         }
-        //     }
-        //     resolve(response);
-        // });
       } catch (error) {
         console.error(error);
         reject(error);
