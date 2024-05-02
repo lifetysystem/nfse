@@ -2,7 +2,6 @@
 const request = require("request");
 const soap = require("soap");
 const fs = require("fs");
-const  parseString = require("xml2js").parseString;
 
 function webServiceRequestREST(xmlData, object) {
   try {
@@ -93,7 +92,7 @@ function webServiceRequestSOAP(xmlData, object) {
         const certificatePath = object.config.diretorioDoCertificado;
         const certificatePassword = object.config.senhaDoCertificado;
         const webserviceRetry = object.config.insistirNoWebservice;
-
+        
         var args = { xml: xmlEnveloped };
         soap.createClient(url, {}, function (err, client) {
           switch(object.config.acao) {
@@ -107,6 +106,22 @@ function webServiceRequestSOAP(xmlData, object) {
                   
                   if (result.RecepcionarLoteRpsResult) {
                     resolve(result.RecepcionarLoteRpsResult);
+                  } else {
+                    resolve({ error: 'Erro no servidor' });
+                  }
+                }
+              );
+              break;
+              case 'gerarNfse':
+              client.AbrasfService.AbrasfPort.GerarNfse(
+                args,
+                function (err, result) {
+                  if (err !== null) {
+                    reject(err);
+                  }
+                  
+                  if (result.GerarNfseResult) {
+                    resolve(result.GerarNfseResult);
                   } else {
                     resolve({ error: 'Erro no servidor' });
                   }

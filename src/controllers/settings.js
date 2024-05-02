@@ -149,6 +149,20 @@ const setParticularities = (object, city) => {
                     //  particularitiesObject['isSigned']['signatureId'] = 'dsig'
                 }
 
+                if (object.config.acao === 'gerarNfse') {
+                    particularitiesObject['tags'] = {...abrasf204Model.abrasf204};
+                    addPrefixesAsync(['GerarNfseEnvio', 'Rps'], '', particularitiesObject);
+                    doNotAddPrefixesAsync(['GerarNfseEnvio', 'Rps'], '', particularitiesObject);
+                    particularitiesObject['tags']['gerarNfseEnvioAlterada'] = `${particularitiesObject['tags']['gerarNfseEnvio']} xmlns="http://www.abrasf.org.br/nfse.xsd"`;
+                    particularitiesObject['tags']['infDeclaracaoPrestacaoServico'] = `${particularitiesObject['tags']['infDeclaracaoPrestacaoServico']}`;
+                    particularitiesObject['isSigned']['isEmptyUri'] = false;
+                    particularitiesObject['envelopment'] = `<?xml version="1.0" encoding="utf-8"?>__xml__`;
+                    //particularitiesObject['envelopment'] = `<?xml version='1.0' encoding='utf-8'?><soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ws="https://abrasfchapeco.meumunicipio.online/ws"><soapenv:Header/><soapenv:Body><ws:RecepcionarLoteRps xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><xml>__xml__</xml></ws:RecepcionarLoteRps></soapenv:Body></soapenv:Envelope>`;
+                    particularitiesObject['isSigned']['isDifferentSignature'] = true;
+                    particularitiesObject['isSigned']['infDeclaracaoPrestacaoServico'] = false;
+                    //  particularitiesObject['isSigned']['signatureId'] = 'dsig'
+                }
+
                 if (object.config.acao === 'consultarLoteRps') {
                     particularitiesObject['tags'] = {...abrasf204Model.abrasf204};
                     addPrefixesAsync(['ConsultarLoteRpsEnvio', 'Prestador', 'Protocolo'], '', particularitiesObject);
