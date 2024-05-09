@@ -92,10 +92,10 @@ function webServiceRequestSOAP(xmlData, object) {
         const certificatePath = object.config.diretorioDoCertificado;
         const certificatePassword = object.config.senhaDoCertificado;
         const webserviceRetry = object.config.insistirNoWebservice;
-        
+
         var args = { xml: xmlEnveloped };
         soap.createClient(url, {}, function (err, client) {
-          switch(object.config.acao) {
+          switch (object.config.acao) {
             case 'enviarLoteRps':
               client.AbrasfService.AbrasfPort.RecepcionarLoteRps(
                 args,
@@ -103,7 +103,7 @@ function webServiceRequestSOAP(xmlData, object) {
                   if (err !== null) {
                     reject(err);
                   }
-                  
+
                   if (result.RecepcionarLoteRpsResult) {
                     resolve(result.RecepcionarLoteRpsResult);
                   } else {
@@ -112,14 +112,14 @@ function webServiceRequestSOAP(xmlData, object) {
                 }
               );
               break;
-              case 'gerarNfse':
+            case 'gerarNfse':
               client.AbrasfService.AbrasfPort.GerarNfse(
                 args,
                 function (err, result) {
                   if (err !== null) {
                     reject(err);
                   }
-                  
+
                   if (result.GerarNfseResult) {
                     resolve(result.GerarNfseResult);
                   } else {
@@ -128,10 +128,27 @@ function webServiceRequestSOAP(xmlData, object) {
                 }
               );
               break;
+            case 'consultarLoteRps':
+              client.AbrasfService.AbrasfPort.ConsultarLoteRps(
+                args,
+                function (err, result) {
+                  if (err !== null) {
+                    reject(err);
+                  }
+        
+                  if (result.ConsultarLoteRpsResult) {
+                    resolve(result.ConsultarLoteRpsResult);
+                  } else {
+                    resolve({ error: 'Erro no servidor' });
+                  }
+                }
+              );
+              break;
             default:
+              console.log(object.config.acao);
               const result = {
-                  message: 'Ação não configurada para envio de SOAP',
-                  error: 'Ação não configurada para envio de SOAP'
+                message: 'Ação não configurada para envio de SOAP',
+                error: 'Ação não configurada para envio de SOAP'
               };
               reject(result);
               break;
