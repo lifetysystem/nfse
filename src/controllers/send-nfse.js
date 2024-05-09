@@ -119,8 +119,6 @@ function webServiceRequestSOAP(xmlData, object) {
                     if (err !== null) {
                       reject(err);
                     }
-
-                    console.log(result);
   
                     if (result.RecepcionarLoteRpsSincronoResult) {
                       resolve(result.RecepcionarLoteRpsSincronoResult);
