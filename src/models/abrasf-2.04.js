@@ -2,6 +2,7 @@ const abrasf204 = {
     gerarNfseEnvio: "GerarNfseEnvio",
     consultarLoteRpsEnvio: "ConsultarLoteRpsEnvio",
     enviarLoteRpsEnvio: "EnviarLoteRpsEnvio",
+    enviarLoteRpsSincronoEnvio: "EnviarLoteRpsSincronoEnvio",
     cancelarNfseEnvio: "CancelarNfseEnvio",
     consultarNfseRpsEnvio: "ConsultarNfseRpsEnvio",
     loteRps: "LoteRps",

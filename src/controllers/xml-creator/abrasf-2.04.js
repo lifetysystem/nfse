@@ -165,7 +165,119 @@ const createXml = async (object, particularitiesObject, numeroLote) => {
                         reject(error);
                     }
                     break;
+                case 'enviarLoteRpsSincrono':
+                    try {
+                        pem.readPkcs12(pfx, {
+                            p12Password: object.config.senhaDoCertificado
+                        }, (err, cert) => {
 
+                            if (err) {
+                                resolve(err);
+                            }
+
+                            let uniqueValue = numeroLote;
+                            let regexUnique = new RegExp('_uniqueValue', 'g');
+
+                            let xml = `<${particularitiesObject['tags']['enviarLoteRpsSincronoEnvioAlterada'] ? particularitiesObject['tags']['enviarLoteRpsSincronoEnvioAlterada'] : particularitiesObject['tags']['enviarLoteRpsSincronoEnvio']}>`;
+                            xml += `<${particularitiesObject['tags']['loteRpsAlterada'] ? particularitiesObject['tags']['loteRpsAlterada'] : particularitiesObject['tags']['loteRps']} versao="2.04">`;
+                            if (numeroLote) {
+                                xml += `<${particularitiesObject['tags']['numeroLoteAlterada'] ? particularitiesObject['tags']['numeroLoteAlterada'] : particularitiesObject['tags']['numeroLote']}>` + numeroLote + `</${particularitiesObject['tags']['numeroLote']}>`;
+                            }
+
+                            if (object.emissor.cpfCnpj) {
+                                xml += `<${particularitiesObject['tags']['prestador']}>`;
+                                xml += `<${particularitiesObject['tags']['cpfCnpj']}>`;
+                                if (object.emissor.cpfCnpj.replace(/[^\d]+/g, '').length === 11) {
+                                    xml += `<${particularitiesObject['tags']['cpf']}>` + object.emissor.cpfCnpj.replace(/\.|\/|\-|\s/g, '') + `</${particularitiesObject['tags']['cpf']}>`;
+                                }
+
+                                if (object.emissor.cpfCnpj.replace(/[^\d]+/g, '').length === 14) {
+                                    xml += `<${particularitiesObject['tags']['cnpj']}>` + object.emissor.cpfCnpj.replace(/[^\d]+/g, '') + `</${particularitiesObject['tags']['cnpj']}>`;
+                                }
+                                xml += `</${particularitiesObject['tags']['cpfCnpj']}>`;
+
+                                if (object.emissor.inscricaoMunicipal && object.emissor.inscricaoMunicipal != '') {
+                                    xml += `<${particularitiesObject['tags']['inscricaoMunicipal']}>` + object.emissor.inscricaoMunicipal + `</${particularitiesObject['tags']['inscricaoMunicipal']}>`;
+                                }
+                                xml += `</${particularitiesObject['tags']['prestador']}>`;
+                            }
+                            xml += `<${particularitiesObject['tags']['quantidadeRpsAlterada'] ? particularitiesObject['tags']['quantidadeRpsAlterada'] : particularitiesObject['tags']['quantidadeRps']}>` + object.rps.length + `</${particularitiesObject['tags']['quantidadeRps']}>`;
+                            xml += `<${particularitiesObject['tags']['listaRpsAlterada'] ? particularitiesObject['tags']['listaRpsAlterada'] : particularitiesObject['tags']['listaRps']}>`;
+
+                            xml = xml.replace(regexUnique, uniqueValue);
+                            addSignedXml(object, cert, particularitiesObject, numeroLote)
+                                .then(signedXmlRes => {
+                                    signedXmlRes.forEach(element => {
+                                        xml += element;
+                                    });
+                                    xml += `</${particularitiesObject['tags']['listaRps']}>`;
+                                    xml += `</${particularitiesObject['tags']['loteRps']}>`;
+                                    xml += `</${particularitiesObject['tags']['enviarLoteRpsSincronoEnvio']}>`;
+
+                                    let isEmptyUri = null;
+                                    if (particularitiesObject['isSigned']['isEmptyUri']) {
+                                        isEmptyUri = particularitiesObject['isSigned']['isEmptyUri'];
+                                    }
+
+                                    let signatureId = null;
+                                    if (particularitiesObject['isSigned']['signatureId']) {
+                                        signatureId = particularitiesObject['isSigned']['signatureId'];
+                                    }
+
+
+                                    let isDifferentSignature = false;
+                                    if (particularitiesObject['isSigned']['isDifferentSignature']) {
+                                        isDifferentSignature = particularitiesObject['isSigned']['isDifferentSignature'];
+                                    }
+
+                                    createSignature(xml, cert, 'InfDeclaracaoPrestacaoServico', signatureId, isEmptyUri, isDifferentSignature)
+                                        .then(xmlSignature => {
+                                            // if (particularitiesObject['xsds']['enviarLoteRps']) {
+                                            //     validator.validateXML(xmlSignature, __dirname + particularitiesObject['xsds']['enviarLoteRps'], function (err, validatorResult) {
+                                            //         if (err) {
+                                            //             console.error(err);
+                                            //             return resolve(err);
+                                            //         }
+
+                                            //         if (!validatorResult.valid) {
+                                            //             console.error(validatorResult);
+                                            //             return resolve(validatorResult);
+                                            //         }
+                                            //     })
+                                            // }
+                                            try {
+                                                // if(particularitiesObject['nfseKeyword'] === 'publica' || particularitiesObject['nfseKeyword'] === 'chapeco'){
+                                                //     xmlSignature = xmlSignature.replace(/'<'/g,'&lt;');
+                                                // }
+
+                                                let xml = particularitiesObject['envelopment'].replace('__xml__', xmlSignature);
+
+                                                const result = {
+                                                    url: particularitiesObject['webserviceUrl'],
+                                                    soapEnvelop: xml,
+                                                    xml: xmlSignature
+                                                }
+                                                if (particularitiesObject['soapActions'] && particularitiesObject['soapActions']['enviarLoteRpsSincrono']) {
+                                                    result['soapAction'] = particularitiesObject['soapActions']['enviarLoteRpsSincrono'];
+                                                }
+
+                                                resolve(result);
+                                            } catch (error) {
+                                                console.error(error);
+                                            }
+                                        }).catch(err => {
+                                            console.error(err);
+                                        });
+                                })
+                                .catch(signedXmlRej => {
+                                    console.error(signedXmlRej);
+                                    reject(signedXmlRej);
+                                })
+                        });
+                    } catch (error) {
+                        reject(error);
+                    }
+                    break;
                 case 'gerarNfse':
                     try {
                         pem.readPkcs12(pfx, {

@@ -112,6 +112,24 @@ function webServiceRequestSOAP(xmlData, object) {
                 }
               );
               break;
+              case 'enviarLoteRpsSincrono':
+                client.AbrasfService.AbrasfPort.RecepcionarLoteRpsSincrono(
+                  args,
+                  function (err, result) {
+                    if (err !== null) {
+                      reject(err);
+                    }
+
+                    console.log(result);
+  
+                    if (result.RecepcionarLoteRpsSincronoResult) {
+                      resolve(result.RecepcionarLoteRpsSincronoResult);
+                    } else {
+                      resolve({ error: 'Erro no servidor' });
+                    }
+                  }
+                );
+                break;
             case 'gerarNfse':
               client.AbrasfService.AbrasfPort.GerarNfse(
                 args,
